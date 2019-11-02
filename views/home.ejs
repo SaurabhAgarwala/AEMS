@@ -7,11 +7,39 @@
     <title>MYSQL</title>
 </head>
 <body>
+    <a href="" id="quick">Closest Ambulance</a>
+    <div id="closest_ambulance" style="visibility: hidden;">
     <form method="POST">
-        <input type="text", placeholder="Name" name="fullname">
-        <input type="text", placeholder="Username" name="username">
+        <input type="text", placeholder="X_coordinate" name="x">
+        <input type="text", placeholder="Y_coordinate" name="y">
         <input type="submit" value="Submit Details">
 
     </form>
+    </div>
+    <a href="" id="best">Best Available Ambulance</a>
+    <div id="ambulance_by_disease" style="visibility: hidden;">
+            <form method="POST">
+                <input type="text", placeholder="X_coordinate" name="x">
+                <input type="text", placeholder="Y_coordinate" name="y">
+                <input type="text", placeholder="Medical Problem" name="problem">
+                <input type="submit" value="Submit Details">
+        
+            </form>
+            </div>
 </body>
+
+<script>
+    document.getElementById('quick').addEventListener('click',(e)=>{
+        e.preventDefault();
+
+        document.getElementById('closest_ambulance').style.visibility="visible";
+        document.getElementById('ambulance_by_disease').style.visibility="hidden";
+    });
+    document.getElementById('best').addEventListener('click',(e)=>{
+        e.preventDefault();
+
+        document.getElementById('ambulance_by_disease').style.visibility="visible";
+        document.getElementById('closest_ambulance').style.visibility="hidden";
+    })
+</script>
 </html>
