@@ -31,7 +31,7 @@ var db = mysql.createConnection({
     host     : 'localhost',
     user     : '17shashank17',
     password : 'lelopassword@',
-    database : 'User_Info'
+    database : 'aems'
 });
 
 db.connect((err)=>{
@@ -76,24 +76,35 @@ app.post('/',urlencodedparser,(req,res)=>{
         });
     }
     else{
-        db.query(`insert into Patient_Record values('${req.body.x},'${req.body.y}','${req.body.problem}')`,(err,results)=>{
+        
+        db.query(`insert into Patient_records values('${req.body.x}','${req.body.y}','${req.body.problem}')`,(err,results)=>{
             if(err) throw err;
             else console.log("insertion complete");
             
         });
-        db.query(`Select a.x,a.y from Ambulance a join Suitable_Ambulance s on a.vehicle_no=s.vehicle_no and s.disease=${req.body.problem}`,(err,results)=>{
+        db.query(`select Amb.vehicle_no from (select vehicle_no from Ambulance
+            where tools in (select Tools from Diseases where Disease='${req.body.problem}')) as Amb group by Amb.vehicle_no 
+            having count(Amb.vehicle_no)=(select count(Tools) from Diseases where Disease='${req.body.problem}')`,(err,results)=>{
             console.log(results);
-            k=0;
-            for(i of results){
-                var distance=findistance([req.body.x,req.body.y],[i.x,i.y])
-                if (distance<min_distance){
-                    min_distance=distance;
-                    min_distance_index=k;
-                }
-                k+=1
-            }
-        console.log(results[min_distance_index].vehicle_no);
-        })
+            var arr=[];
+            var s=0;
+            for (i of results){
+    
+                db.query(`select x,y,vehicle_no from Ambulance_loc where vehicle_no = '${i.vehicle_no}' and status='available'`,(err,result)=>{
+                    if(err) console.log('Error Occured')
+                    else{
+                        console.log(result);
+                    }
+            
+        
+                    for(i of result){
+                        var distance=findistance([req.body.x,req.body.y],[i.x,i.y])
+                        if (distance<min_distance){
+                            min_distance=distance;
+                            min_distance_index=k;
+                        }
+                        k+=1
+                    }
     }
 });
 
