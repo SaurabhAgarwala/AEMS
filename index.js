@@ -2,6 +2,7 @@ var express=require('express')
 var mysql=require('mysql');
 
 const kmeans=require('node-kmeans');
+var reader=require('csv-reader');
 
 /*points=[[2,10],[2,5],[8,4],[5,8],[7,5],[6,4],[1,2],[4,9]]
 
@@ -54,29 +55,47 @@ app.get('/',(req,res)=>{
 
 app.post('/',urlencodedparser,(req,res)=>{
 
-    /*db.query(`insert into Patient_Record values('${req.body.x}','${req.body.y}','${req.body.problem}')`,(err,result)=>{
-        if(err) throw err;
-        else{
-            console.log('insertion complete');
-        }*/
-    db.query(`Select * from Ambulance where status='available'`,(err,results)=>{
-        console.log(results); 
-    
-        var points=[];
-        k=0;
-        min_distance=99999;
-        min_distance_index=-1;
-        for (i of results){
-            var distance=findistance([req.body.x,req.body.y],[i.x,i.y])
-            if (distance<min_distance){
-                min_distance=distance;
-                min_distance_index=k;
+    if (req.body.problem==undefined){
+
+        db.query(`Select * from Ambulance where status='available'`,(err,results)=>{
+            console.log(results); 
+            console.log(req.body.problem);
+            var points=[];
+            k=0;
+            min_distance=99999;
+            min_distance_index=-1;
+            for (i of results){
+                var distance=findistance([req.body.x,req.body.y],[i.x,i.y])
+                if (distance<min_distance){
+                    min_distance=distance;
+                    min_distance_index=k;
+                }
+                k+=1;
             }
-            k+=1;
-        }
+            console.log(results[min_distance_index].vehicle_no);
+        });
+    }
+    else{
+        db.query(`insert into Patient_Record values('${req.body.x},'${req.body.y}','${req.body.problem}')`,(err,results)=>{
+            if(err) throw err;
+            else console.log("insertion complete");
+            
+        });
+        db.query(`Select a.x,a.y from Ambulance a join Suitable_Ambulance s on a.vehicle_no=s.vehicle_no and s.disease=${req.body.problem}`,(err,results)=>{
+            console.log(results);
+            k=0;
+            for(i of results){
+                var distance=findistance([req.body.x,req.body.y],[i.x,i.y])
+                if (distance<min_distance){
+                    min_distance=distance;
+                    min_distance_index=k;
+                }
+                k+=1
+            }
         console.log(results[min_distance_index].vehicle_no);
-    });
-})
+        })
+    }
+});
 
 app.listen(8080,()=>{
     console.log('connected to the server');
