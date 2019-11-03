@@ -14,14 +14,14 @@ kmeans.clusterize(points,{k:3},(req,res,err)=>{
     }
 })*/
 
-var app=express()
+var app=express.Router();
 
 var ejs=require('ejs');
 var bodyparser=require('body-parser');
 
 urlencodedparser=bodyparser.urlencoded({extended: false});
 
-app.set('view engine','ejs')
+
 
 function findistance(point1,point2){
     console.log('Pts:',point1,point2)
@@ -98,19 +98,39 @@ app.post('/',urlencodedparser,(req,res)=>{
                     var k=0;
                     for (i of results){
                         x=findistance([i.x,i.y],[req.body.x,req.body.y])
-                        if(x<min){
-                            min=x;
+                        if(x<min_dist){
+                            min_dist=x;
                             min_index=k;
                         }
                         k+=1
                     }
+                    //Ambulance found
                     console.log(results[min_index]);
-                    
+
                 }
         });
+        db.query(`Select * from Hospitals`,(err,results)=>{
+            if(err) throw err;
+            else{
+                var min_dist=20000;
+                var min_index=-1
+                var k=0;
+                for (i of results){
+                    x=findistance([i.x,i.y],[req.body.x,req.body.y])
+                    if(x<min_dist){
+                        min_dist=x;
+                        min_index=k;
+                    }
+                    k+=1
+                }
+                //Hospital Found
+                console.log(results[min_index])
+            } 
+        });
+        //send optimised ambulance and hospital id
+
     }
 });
 
-app.listen(8080,()=>{
-    console.log('connected to the server');
-})
+module.exports=app;
+
