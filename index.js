@@ -24,7 +24,10 @@ urlencodedparser=bodyparser.urlencoded({extended: false});
 app.set('view engine','ejs')
 
 function findistance(point1,point2){
-    return Math.sqrt(Math.pow(point1[0]-point2[0],2)+ Math.pow(point1[1]-point2[1],2));
+    console.log('Pts:',point1,point2)
+    var ans = Math.sqrt(Math.pow(point1[0]-point2[0],2)+ Math.pow(point1[1]-point2[1],2));
+    console.log(ans);
+    return ans;
 }
 
 var db = mysql.createConnection({
@@ -82,29 +85,34 @@ app.post('/',urlencodedparser,(req,res)=>{
             else console.log("insertion complete");
             
         });
+        var min=20000;
+        var min_index=0;
         db.query(`select Amb.vehicle_no from (select vehicle_no from Ambulance
             where tools in (select Tools from Diseases where Disease='${req.body.problem}')) as Amb group by Amb.vehicle_no 
             having count(Amb.vehicle_no)=(select count(Tools) from Diseases where Disease='${req.body.problem}')`,(err,results)=>{
-            console.log(results);
-            var arr=[];
-            var s=0;
-            for (i of results){
-    
-                db.query(`select x,y,vehicle_no from Ambulance_loc where vehicle_no = '${i.vehicle_no}' and status='available'`,(err,result)=>{
-                    if(err) console.log('Error Occured')
-                    else{
-                        console.log(result);
-                    }
-            
-        
-                    for(i of result){
-                        var distance=findistance([req.body.x,req.body.y],[i.x,i.y])
-                        if (distance<min_distance){
-                            min_distance=distance;
-                            min_distance_index=k;
+                console.log('Results from query:',results);
+                // var k=0;
+                for (i=0;i<results.length;i++){
+                    console.log('Individual Ambulance:',results[i]);
+                    db.query(`select x,y,vehicle_no from Ambulance_loc where vehicle_no = '${results[i].vehicle_no}' and status='available'`,(err,result)=>{
+                        if(err) throw err;
+                        else{ 
+                            console.log('In else');
+                            console.log('Ambulance Location',result[0].x,result[0].y)
+                            x=findistance([result[0].x,result[0].y],[req.body.x,req.body.y]);
+                            console.log('min_current',min, 'Current distance',x);
+                            if (min>x){
+                                min=x;
+                                min_index=k;
+                                console.log('updated index',min_index);
+                            }
                         }
-                        k+=1
-                    }
+                    });
+                    k+=1;
+                }
+                console.log('Ans_min_index',min_index);
+                console.log('Ans',results[min_index]);
+            });
     }
 });
 
