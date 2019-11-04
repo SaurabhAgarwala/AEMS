@@ -1,45 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>MYSQL</title>
-</head>
-<body>
-    <a href="" id="quick">Closest Ambulance</a>
-    <div id="closest_ambulance" style="visibility: hidden;">
-    <form method="POST">
-        <input type="text", placeholder="X_coordinate" name="x">
-        <input type="text", placeholder="Y_coordinate" name="y">
-        <input type="submit" value="Submit Details">
 
-    </form>
-    </div>
-    <a href="" id="best">Best Available Ambulance</a>
-    <div id="ambulance_by_disease" style="visibility: hidden;">
-            <form method="POST">
-                <input type="text", placeholder="X_coordinate" name="x">
-                <input type="text", placeholder="Y_coordinate" name="y">
-                <input type="text", placeholder="Medical Problem" name="problem">
-                <input type="submit" value="Submit Details">
-        
-            </form>
-            </div>
-</body>
+<style>
+.box{
+    text-align: center;
+    border: 2px solid gray;
+    position: absolute;
+    margin-top: 30px;
+    border-radius: 4px;
+    padding: 40px;
+}
+.btn{
+    background: white;
+    width: 250px;
+}
+</style>
 
-<script>
-    document.getElementById('quick').addEventListener('click',(e)=>{
-        e.preventDefault();
-
-        document.getElementById('closest_ambulance').style.visibility="visible";
-        document.getElementById('ambulance_by_disease').style.visibility="hidden";
-    });
-    document.getElementById('best').addEventListener('click',(e)=>{
-        e.preventDefault();
-
-        document.getElementById('ambulance_by_disease').style.visibility="visible";
-        document.getElementById('closest_ambulance').style.visibility="hidden";
-    })
-</script>
-</html>
+<div class="container box">
+    <% include ./partials/msg %>
+    <button class="btn btn-success"><a href="/user/login">Login</a></button><br><br>
+    <button class="btn btn-primary"><a href="/user/register">Register</a></button>
+</div>
