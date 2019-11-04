@@ -7,6 +7,9 @@ var ejslayout=require('express-ejs-layouts');
 app.set('view engine','ejs')
 app.use(ejslayout);
 
+// To include assets for UI
+app.use(express.static(path.join(__dirname, "public")));
+
 const expressSession = require('express-session')
 const flash=require('connect-flash');
 const passport=require('passport');
