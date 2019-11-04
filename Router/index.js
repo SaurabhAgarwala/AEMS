@@ -53,7 +53,7 @@ app.get('/createtable',(req,res)=>{
 })
 
 app.get('/',(req,res)=>{
-    res.render('index');
+    res.render('main');
 });
 
 app.post('/',urlencodedparser,(req,res)=>{
@@ -61,7 +61,7 @@ app.post('/',urlencodedparser,(req,res)=>{
     if (req.body.problem==undefined){
 
         db.query(`Select * from Ambulance where status='available'`,(err,results)=>{
-            console.log(results); 
+            console.log(results);
             console.log(req.body.problem);
             var points=[];
             k=0;
@@ -79,19 +79,19 @@ app.post('/',urlencodedparser,(req,res)=>{
         });
     }
     else{
-        
+
         db.query(`insert into Patient_records values('${req.body.x}','${req.body.y}','${req.body.problem}')`,(err,results)=>{
             if(err) throw err;
             else console.log("insertion complete");
-            
+
         });
         var min=20000;
         var min_index=0;
         db.query(`select x,y,vehicle_no from Ambulance_loc where vehicle_no in (select Amb.vehicle_no from (select vehicle_no from Ambulance
-            where tools in (select Tools from Diseases where Disease='${req.body.problem}')) as Amb group by Amb.vehicle_no 
+            where tools in (select Tools from Diseases where Disease='${req.body.problem}')) as Amb group by Amb.vehicle_no
             having count(Amb.vehicle_no)=(select count(Tools) from Diseases where Disease='${req.body.problem}'))`,(err,results)=>{
                 if(err) throw err;
-                else{ 
+                else{
                     var min_dist=20000;
                     var min_index=-1
                     var k=0;
@@ -124,7 +124,7 @@ app.post('/',urlencodedparser,(req,res)=>{
                 }
                 //Hospital Found
                 console.log(results[min_index])
-            } 
+            }
         });
         //send optimised ambulance and hospital id
 
