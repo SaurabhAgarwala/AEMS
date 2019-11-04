@@ -4,6 +4,8 @@ var mysql=require('mysql');
 const kmeans=require('node-kmeans');
 var reader=require('csv-reader');
 
+const {ensureAuthenticated}=require('../config/auth');
+
 /*points=[[2,10],[2,5],[8,4],[5,8],[7,5],[6,4],[1,2],[4,9]]
 
 kmeans.clusterize(points,{k:3},(req,res,err)=>{
@@ -24,9 +26,7 @@ urlencodedparser=bodyparser.urlencoded({extended: false});
 
 
 function findistance(point1,point2){
-    console.log('Pts:',point1,point2)
     var ans = Math.sqrt(Math.pow(point1[0]-point2[0],2)+ Math.pow(point1[1]-point2[1],2));
-    console.log(ans);
     return ans;
 }
 
@@ -53,7 +53,7 @@ app.get('/createtable',(req,res)=>{
 })
 
 app.get('/',(req,res)=>{
-    res.render('home');
+    res.render('index');
 });
 
 app.post('/',urlencodedparser,(req,res)=>{
@@ -92,7 +92,6 @@ app.post('/',urlencodedparser,(req,res)=>{
             having count(Amb.vehicle_no)=(select count(Tools) from Diseases where Disease='${req.body.problem}'))`,(err,results)=>{
                 if(err) throw err;
                 else{ 
-                    console.log(results);
                     var min_dist=20000;
                     var min_index=-1
                     var k=0;
@@ -113,7 +112,7 @@ app.post('/',urlencodedparser,(req,res)=>{
             if(err) throw err;
             else{
                 var min_dist=20000;
-                var min_index=-1
+                var min_index=-1;
                 var k=0;
                 for (i of results){
                     x=findistance([i.x,i.y],[req.body.x,req.body.y])
@@ -131,6 +130,8 @@ app.post('/',urlencodedparser,(req,res)=>{
 
     }
 });
+
+app.get('/dashboard',ensureAuthenticated,(req,res)=> res.render('dashboard',{username:req.user.username}));
 
 module.exports=app;
 

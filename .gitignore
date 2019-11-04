@@ -153,3 +153,6 @@ dist
 
 # TernJS port file
 .tern-port
+
+#for hiding mongodb key
+config/keys.js
