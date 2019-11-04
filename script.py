@@ -1,5 +1,4 @@
 import math
-import quantumrandom
 import random
 import os
 import sys
@@ -11,8 +10,8 @@ f = open("dataset.csv", 'w')
 
 for i in range(100):
     temp = []
-    temp.append(int(quantumrandom.randint(0, 100)))
-    temp.append(int(quantumrandom.randint(0, 100)))
+    temp.append(int(random.randint(0, 100)))
+    temp.append(int(random.randint(0, 100)))
     temp.append(random.choice(list))
     f.write(str(temp[0]) + ',')
     f.write(str(temp[1]) + ',')
