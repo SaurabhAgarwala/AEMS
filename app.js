@@ -2,6 +2,7 @@ var express=require('express')
 
 var app=express();
 var ejslayout=require('express-ejs-layouts');
+var path=require('path')
 
 
 app.set('view engine','ejs')
