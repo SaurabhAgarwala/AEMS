@@ -40,7 +40,7 @@ var db = mysql.createConnection({
 db.connect((err)=>{
     if(err) throw err;
     else
-        console.log('Connection with database established');
+        console.log('Connection with mysql database established');
 });
 
 app.get('/createtable',(req,res)=>{
@@ -57,12 +57,12 @@ app.get('/',(req,res)=>{
 });
 
 app.post('/',urlencodedparser,(req,res)=>{
-
-    if (req.body.problem==undefined){
-
-        db.query(`Select * from Ambulance where status='available'`,(err,results)=>{
-            console.log(results);
-            console.log(req.body.problem);
+    if (typeof(req.body.problem)!='string'){
+        var data=[];
+        var amb_vehicle_no = 0;
+        var total_distance = 0;
+        db.query(`Select * from Ambulance_loc where status='available'`,(err,results)=>{
+            // console.log(results);
             var points=[];
             k=0;
             min_distance=99999;
@@ -75,11 +75,51 @@ app.post('/',urlencodedparser,(req,res)=>{
                 }
                 k+=1;
             }
-            console.log(results[min_distance_index].vehicle_no);
+            // console.log(results[min_distance_index].vehicle_no);
+            amb_vehicle_no = results[min_distance_index].vehicle_no
+            data.push({vehicle_no:results[min_distance_index].vehicle_no,x:results[min_distance_index].x,y:results[min_distance_index].y, 
+                base_fare:results[min_distance_index].base_fare, charge_per_km:results[min_distance_index].charge_per_km});
+        });
+        db.query(`Select * from Hospitals`,(err,results)=>{
+            if(err) throw err;
+            else{
+                var min_dist=20000;
+                var min_index=-1;
+                var k=0;
+                for (i of results){
+                    x=findistance([i.x,i.y],[req.body.x,req.body.y])
+                    if(x<min_dist){
+                        min_dist=x;
+                        min_index=k;
+                    }
+                    k+=1
+                }
+                //Hospital Found
+                // console.log(results[min_index])
+            }
+            total_distance = min_dist;
+            var cost = data[0].base_fare + (min_dist*data[0].charge_per_km);
+            // console.log('cost', cost);
+            data.push({hid:results[min_index].ID,x:results[min_index].x,y:results[min_index].y, cost:parseInt(cost), distance:min_dist});
+            // console.log('inside if',data)
+            // res.render('results',{data:data});
+            console.log(amb_vehicle_no);
+            db.query(`select * from Ambulance_driver where vehicle_no='${amb_vehicle_no}'`,(err,results)=>{
+                if(err) console.log('this is the error', results);
+                else{
+                    // console.log('these results', results)
+                    data.push({contact_no:results[0].contact_no, driver_name:results[0].driver_name})
+                    // console.log('inside if',data);
+                    res.render('results',{data:data});
+                }
+            });
+            // console.log('inside if',data)
+            
         });
     }
     else{
-
+        var data=[];
+        var amb_vehicle_no = 0;
         db.query(`insert into Patient_records values('${req.body.x}','${req.body.y}','${req.body.problem}')`,(err,results)=>{
             if(err) throw err;
             else console.log("insertion complete");
@@ -107,6 +147,8 @@ app.post('/',urlencodedparser,(req,res)=>{
                     console.log(results[min_index]);
 
                 }
+                amb_vehicle_no = results[min_index].vehicle_no
+                data.push({vehicle_no:results[min_index].vehicle_no,x:results[min_index].x,y:results[min_index].y});
         });
         db.query(`Select * from Hospitals`,(err,results)=>{
             if(err) throw err;
@@ -120,15 +162,29 @@ app.post('/',urlencodedparser,(req,res)=>{
                         min_dist=x;
                         min_index=k;
                     }
-                    k+=1
+                    k+=1;
                 }
                 //Hospital Found
-                console.log(results[min_index])
+                console.log(results[min_index]);
+            }
+            data.push({hid:results[min_index].ID,x:results[min_index].x,y:results[min_index].y});
+            // console.log('data',data);
+            // res.render('results',{data:data});
+        //send optimised ambulance and hospital id
+            console.log('Ambulance number',amb_vehicle_no);
+            db.query(`select * from Ambulance_driver where vehicle_no='${amb_vehicle_no}'`,(err,results)=>{
+            if(err) console.log('this is the error', results);
+            else{
+                console.log('these results', results)
+                data.push({contact_no:results[0].contact_no, driver_name:results[0].driver_name})
+                console.log('inside else query',data);
+                res.render('results',{data:data});
             }
         });
-        //send optimised ambulance and hospital id
-
+        });
+        // console.log('inside else',data)
     }
+    
 });
 
 app.get('/dashboard',ensureAuthenticated,(req,res)=> res.render('dashboard',{username:req.user.username}));

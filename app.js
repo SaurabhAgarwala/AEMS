@@ -8,6 +8,15 @@ var path=require('path')
 app.set('view engine','ejs')
 app.use(ejslayout);
 
+var bodyParser=require('body-parser');
+app.use(bodyParser());
+app.use(bodyParser.urlencoded());
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: true
+  }));
+
 // To include assets for UI
 app.use(express.static(path.join(__dirname, "public")));
 

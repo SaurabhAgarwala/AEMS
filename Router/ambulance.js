@@ -3,9 +3,9 @@ var express=require('express');
 var passport=require('passport');
 
 var router=express.Router()
-var bodyparser=require('body-parser');
+//var bodyparser=require('body-parser');
 
-urlencoded=bodyparser.urlencoded({extended:false})
+//urlencoded=bodyparser.urlencoded({extended:false})
 
 router.get('/login',(req,res) => res.render('login'));
 
@@ -15,7 +15,7 @@ const User=require('../models/User');
 
 const bcrypt=require('bcryptjs');
 
-router.post('/register',urlencoded,function(req,res){
+router.post('/register',function(req,res){
     const {nameofuser,username,password,conf_password,email}=req.body;
     let errors=[]
     if (!nameofuser || !username || !password || !email){
@@ -55,7 +55,7 @@ router.post('/register',urlencoded,function(req,res){
                 const newUser=new User({
                     nameofuser,
                     username,
-                    password,
+                    password,nodemon,
                     email
                 });
                 bcrypt.genSalt(10,(err,salt) => {
@@ -77,10 +77,10 @@ router.post('/register',urlencoded,function(req,res){
     }
 });
 
-router.post('/login',urlencoded,(req,res,next) => {
+router.post('/login',(req,res,next) => {
     passport.authenticate('local',{
         successRedirect: '/dashboard',
-        failureRedirect: '/user/login',
+        failureRedirect: '/ambulance/login',
         failureFlash: true
     })(req,res,next)
 })
@@ -90,5 +90,16 @@ router.get('/logout',(req,res) => {
     req.flash('success_msg','Successfully Logged Out!');
     res.redirect('/');
 })
+
+router.post('/change_status_available/:vehicle_no',(req,res)=>{
+    console.log(req.params.vehicle_no);
+    res.json(JSON.stringify({'status':'available'}));
+});
+
+router.post('/confirmation',(req,res)=>{
+    console.log("server")
+    //req.flash('success_msg','Your booked ambulance is on the way')
+    res.json(JSON.stringify({'status':'Booked'}))
+});
 
 module.exports=router;

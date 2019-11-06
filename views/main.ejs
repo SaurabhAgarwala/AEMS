@@ -100,25 +100,27 @@
                         <div class="banner_text_iner">
                             <h5>We are here for your care</h5>
                             <h1>Emergency Ambulance Call</h1>
-                            <a href="#" class="btn_2" id="quick">Find any ambulance</a>
-                            <div id="closest_ambulance" style="visibility: hidden;">
-                                <form method="POST">
-                                    <input type="text" , placeholder="X_coordinate" name="x">
-                                    <input type="text" , placeholder="Y_coordinate" name="y">
-                                    <input type="submit" value="Submit Details">
+                    
+                                <a href="#" class="btn_2" id="quick">Find any ambulance</a><br>
+                                <div id="closest_ambulance" style="visibility: hidden;">
+                                    <form method="POST" class="form-group">
+                                        <input class="form-control" type="text" , placeholder="X_coordinate" name="x">
+                                        <input class="form-control" type="text" , placeholder="Y_coordinate" name="y">
+                                        <input class="btn btn-primary" type="submit" value="Submit Details">
 
-                                </form>
-                            </div>
-                            <a href="#" class="btn_2" id="best">Find a special one</a>
-                            <div id="ambulance_by_disease" style="visibility: hidden;">
-                                <form method="POST">
-                                    <input type="text" , placeholder="X_coordinate" name="x">
-                                    <input type="text" , placeholder="Y_coordinate" name="y">
-                                    <input type="text" , placeholder="Medical Problem" name="problem">
-                                    <input type="submit" value="Submit Details">
+                                    </form>
+                                </div>
+                                <a href="#" class="btn_2" id="best">Find a special one</a>
+                                <div id="ambulance_by_disease" style="visibility: hidden;">
+                                    <form method="POST" class="form-group">
+                                        <input class="form-control"  type="text" , placeholder="X_coordinate" name="x">
+                                        <input class="form-control"  type="text" , placeholder="Y_coordinate" name="y">
+                                        <input class="form-control"  type="text" , placeholder="Medical Problem" name="problem">
+                                        <input class="btn btn-primary"  type="submit" value="Submit Details">
 
-                                </form>
-                            </div>
+                                    </form>
+                                </div>
+                    
                             <p>Find the quickest ambulance or one with special facilities as per your requirements.
                                 Simple interface and easy to use </p>
                             <script>
@@ -627,6 +629,7 @@
     <script src="js/custom.js"></script>
     <!-- accordion js -->
     <script src="js/accordion.js"></script>
+    
 
 </body>
 
