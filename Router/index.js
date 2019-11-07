@@ -191,7 +191,7 @@ app.post('/',urlencodedparser,(req,res)=>{
 
                 }
                 amb_vehicle_no = results[min_index].vehicle_no
-                data.push({vehicle_no:results[min_index].vehicle_no,x:results[min_index].x,y:results[min_index].y});
+                data.push({vehicle_no:results[min_index].vehicle_no,x:results[min_index].x,y:results[min_index].y,problem:req.body.problem});
         });
         db.query(`Select * from Hospitals`,(err,results)=>{
             if(err) throw err;
@@ -232,13 +232,13 @@ app.post('/',urlencodedparser,(req,res)=>{
 
 app.get('/dashboard',ensureAuthenticated,(req,res)=> {
     console.log(req.user.username)
-    db.query(`select a.status as status from Ambulance_loc a ,Ambulance_driver b where b.driver_name='${req.user.username}'
+    db.query(`select a.status as status,a.vehicle_no as vehicle_no from Ambulance_loc a ,Ambulance_driver b where b.driver_name='${req.user.username}'
     and a.vehicle_no=b.vehicle_no`,(err,result)=>{
         if(err) console.log('Error');
         else{
             console.log(result)
             console.log(result[0].status)
-            res.render('dashboard',{username:req.user.username,status:result[0].status})
+            res.render('dashboard',{username:req.user.username,status:result[0].status,vehicle_no:result[0].vehicle_no})
         }
     })
     
