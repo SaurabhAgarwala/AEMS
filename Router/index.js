@@ -1,5 +1,6 @@
 var express=require('express')
 var mysql=require('mysql');
+var io=require('../app');
 
 const kmeans=require('node-kmeans');
 var reader=require('csv-reader');
@@ -17,6 +18,8 @@ kmeans.clusterize(points,{k:3},(req,res,err)=>{
 })*/
 
 var app=express.Router();
+
+console.log(io)
 
 var ejs=require('ejs');
 var bodyparser=require('body-parser');
@@ -48,15 +51,51 @@ app.get('/createtable',(req,res)=>{
         if (err) throw err;
         else
             console.log(results);
+    });
 });
 
+app.get('/dashboard/register',ensureAuthenticated,(req,res)=>{
+    db.query(`Select vehicle_no from Ambulance_driver where driver_name='${req.user.username}'`,(err,result)=>{
+        if(err) console.log('Error occured dashboard_register')
+        else{
+            console.log(result);
+            res.render('ambulance_register');
+            // only unregistered people can visit 
+        }
+    })
+    
 })
+
+app.post('/dashboard/register',ensureAuthenticated,(req,res)=>{
+    console.log(req.user.username)
+    db.query(`insert into Ambulance values('${req.body.ambulance_number}','${req.body.equipment}')`,(err,result)=>{
+        if(err) console.log("Error 1")
+        else console.log("insertion 1 complete");
+    })
+    db.query(`insert into Ambulance_loc values('${req.body.ambulance_number}','${50}','${50}','Available',${500},${20})`,(err,result)=>{
+        if(err) console.log("Error 2")
+        else console.log("insertion 2 complete");
+    })
+    db.query(`insert into Ambulance_driver values('${req.body.ambulance_number}','${req.user.username}','${req.body.contact_no}',${5})`,(err,result)=>{
+        if(err) console.log("Error 3")
+        else {
+            console.log("insertion 3 complete");
+            res.redirect('/dashboard');
+        }
+
+    });
+
+});
 
 app.get('/',(req,res)=>{
     res.render('main');
 });
 
 app.post('/',urlencodedparser,(req,res)=>{
+    /*var xhr=new XMLHttpRequest();
+    xhr.open('POST','http://localhost:8080/dashboard',{'a':'b'})
+    xhr.send();*/
+
     if (typeof(req.body.problem)!='string'){
         var data=[];
         var amb_vehicle_no = 0;
@@ -110,6 +149,9 @@ app.post('/',urlencodedparser,(req,res)=>{
                     // console.log('these results', results)
                     data.push({contact_no:results[0].contact_no, driver_name:results[0].driver_name})
                     // console.log('inside if',data);
+                    io.sockets.on('connection',(socket)=>{
+                        io.sockets.emit('send detail to driver',{patient:'YEs Done'})
+                    });
                     res.render('results',{data:data});
                 }
             });
@@ -175,9 +217,9 @@ app.post('/',urlencodedparser,(req,res)=>{
             db.query(`select * from Ambulance_driver where vehicle_no='${amb_vehicle_no}'`,(err,results)=>{
             if(err) console.log('this is the error', results);
             else{
-                console.log('these results', results)
+                //console.log('these results', results)
                 data.push({contact_no:results[0].contact_no, driver_name:results[0].driver_name})
-                console.log('inside else query',data);
+                //console.log('inside else query',data);
                 res.render('results',{data:data});
             }
         });
@@ -187,7 +229,39 @@ app.post('/',urlencodedparser,(req,res)=>{
     
 });
 
-app.get('/dashboard',ensureAuthenticated,(req,res)=> res.render('dashboard',{username:req.user.username}));
+app.get('/dashboard',ensureAuthenticated,(req,res)=> {
+    console.log(req.user.username)
+    db.query(`select a.status as status from Ambulance_loc a ,Ambulance_driver b where b.driver_name='${req.user.username}'
+    and a.vehicle_no=b.vehicle_no`,(err,result)=>{
+        if(err) console.log('Error');
+        else{
+            console.log(result)
+            console.log(result[0].status)
+            res.render('dashboard',{username:req.user.username,status:result[0].status})
+        }
+    })
+    
+});
+
+app.post('/dashboard/change_status',(req,res)=>{
+    console.log(req.user.username)
+    db.query(`update Ambulance_loc set status='Available' where Ambulance_loc.vehicle_no=(select 
+        vehicle_no from Ambulance_driver where driver_name='${req.user.username}')`,(err,results)=>{
+            if(err) console.log('err');
+            else{
+                console.log('updation done');
+                res.json(JSON.stringify({'a':'done'}));
+            }
+        })
+    
+})
+
+app.post('/dashboard',(req,res)=>{
+    console.log('POST request')
+    console.log(req.body)
+    res.send(JSON.stringify({'a':'b'}));
+})
+
 
 module.exports=app;
 

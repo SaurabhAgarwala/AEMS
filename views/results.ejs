@@ -657,14 +657,10 @@
                 console.log(vehicle.innerHTML);
                 var x=vehicle.innerHTML;
                 var path = '/ambulance/change_status_available/5';
-                var data = {
-                    a:"booked"
-                };
-
                 
                 var arr  = [];
                 arr.push({'status':'Available'});
-                fetch('/ambulance/confirmation',{
+                fetch('/ambulance/confirmation/'+x,{
                                             method: 'post',
                                             body: arr,
                                         })

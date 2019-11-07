@@ -2,7 +2,21 @@ var express=require('express');
 
 var passport=require('passport');
 
+var mysql=require('mysql');
+
 var router=express.Router()
+
+var db = mysql.createConnection({
+    host     : 'localhost',
+    user     : '17shashank17',
+    password : 'lelopassword@',
+    database : 'aems'
+});
+db.connect((err)=>{
+    if(err) throw err;
+    else
+        console.log('Connection with mysql database ambulance established');
+});
 //var bodyparser=require('body-parser');
 
 //urlencoded=bodyparser.urlencoded({extended:false})
@@ -16,6 +30,7 @@ const User=require('../models/User');
 const bcrypt=require('bcryptjs');
 
 router.post('/register',function(req,res){
+    console.log(req.body);
     const {nameofuser,username,password,conf_password,email}=req.body;
     let errors=[]
     if (!nameofuser || !username || !password || !email){
@@ -48,15 +63,15 @@ router.post('/register',function(req,res){
                     username,
                     password,
                     conf_password,
-                    email
+                    email,
                 }); 
             }
             else{
                 const newUser=new User({
                     nameofuser,
                     username,
-                    password,nodemon,
-                    email
+                    password,
+                    email,
                 });
                 bcrypt.genSalt(10,(err,salt) => {
                     bcrypt.hash(newUser.password,salt,(err,hash) => {
@@ -66,6 +81,7 @@ router.post('/register',function(req,res){
                         //console.log(newUser.password);
                         newUser.save()
                         .then(user => {
+                            
                             req.flash('success_msg','You have successfully created your account. Login to Continue');
                             res.redirect('/ambulance/login');
                         })
@@ -96,10 +112,16 @@ router.post('/change_status_available/:vehicle_no',(req,res)=>{
     res.json(JSON.stringify({'status':'available'}));
 });
 
-router.post('/confirmation',(req,res)=>{
-    console.log("server")
+router.post('/confirmation/:vehicle_no',(req,res)=>{
+    db.query(`update Ambulance_loc set status='Not Available' where vehicle_no='${req.params.vehicle_no}'`,(err,result)=>{
+        if(err) console.log('Error ocuured while updation');
+        else{
+            console.log('updated');
+            res.json(JSON.stringify({'status':'Booked'}))
+        }
+    })
     //req.flash('success_msg','Your booked ambulance is on the way')
-    res.json(JSON.stringify({'status':'Booked'}))
+    
 });
 
 module.exports=router;

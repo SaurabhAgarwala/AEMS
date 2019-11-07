@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="css/style.css">
     <!-- Accordion CSS -->
     <link rel="stylesheet" href="css/accordion.css">
+    
 </head>
 
 <body>
@@ -79,7 +80,7 @@
                                 </li>
 
                                 <li class="nav-item">
-                                    <a class="nav-link" href="contact.html">Contact</a>
+                                    <a class="nav-link" href="/dashboard/register">Register Your Ambulance</a>
                                 </li>
                             </ul>
                         </div>
@@ -102,11 +103,14 @@
                             <h1>Emergency Ambulance Call</h1>
                     
                             <label>Current Status: </label>
-                            <h2 id="status">Not Available</h2>
+                            
+                            <h2 id="status"><%= status %></h2>
                             <button class="btn-success" href="" name="change-status" id="change-avl-status">I'm available now</button>
-                    
                             <p>Find the quickest ambulance or one with special facilities as per your requirements.
                                 Simple interface and easy to use </p>
+                                <div id="new_booking">
+
+                                </div>
                                 <script>
                                     document.getElementById('change-avl-status').addEventListener('click',(e)=>{
                                         e.preventDefault();
@@ -134,7 +138,7 @@
                                             }
 
                                         });*/
-                                        fetch('/ambulance/change_status_available/{{ vehicle_no }}',{
+                                        fetch('/dashboard/change_status/',{
                                             method: 'post',
                                             body: arr,
                                         })
@@ -142,6 +146,8 @@
                                             return response.json()
                                         })
                                         .then((data)=>{
+                                            status.innerHTML='Available';
+                                            document.getElementById('change-avl-status').style.visibility="hidden";
                                             console.log('Post request created',data);
                                         });
                                     });
@@ -640,5 +646,16 @@
     
 
 </body>
+<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="http://localhost:8080/socket.io/socket.io.js"></script>
+<script>
+    $(function(){
+        var socket=io.connect();
+        var $div=$('#new_booking');
 
+        socket.on('send detail to driver',function(data){
+            console.log('data',data);
+        })
+    })
+</script>
 </html>
