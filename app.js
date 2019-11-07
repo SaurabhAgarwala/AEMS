@@ -63,7 +63,7 @@ mongoose.connect(db,{useUnifiedTopology:true,useNewUrlParser:true})
     .then(() => console.log("MongoDB Connection Established"))
     .catch(err => console.log(err));
 
-app.use('/',require('./Router/index.js'));
+app.use('/',require('./Router/index.js').app);
 app.use('/ambulance',require('./Router/ambulance.js'));
 
 

@@ -7,16 +7,6 @@ var reader=require('csv-reader');
 
 const {ensureAuthenticated}=require('../config/auth');
 
-/*points=[[2,10],[2,5],[8,4],[5,8],[7,5],[6,4],[1,2],[4,9]]
-
-kmeans.clusterize(points,{k:3},(req,res,err)=>{
-    if(err) throw err;
-    else{
-        console.log('clusterised');
-        console.log('%o',res);
-    }
-})*/
-
 var app=express.Router();
 
 var ejs=require('ejs');
@@ -24,17 +14,10 @@ var bodyparser=require('body-parser');
 
 urlencodedparser=bodyparser.urlencoded({extended: false});
 
-
-
-function findistance(point1,point2){
-    var ans = Math.sqrt(Math.pow(point1[0]-point2[0],2)+ Math.pow(point1[1]-point2[1],2));
-    return ans;
-}
-
 var db = mysql.createConnection({
     host     : 'localhost',
-    user     : '17shashank17',
-    password : 'lelopassword@',
+    user     : 'saurabh',
+    password : 'Saurabh@2021',
     database : 'aems'
 });
 
@@ -43,6 +26,57 @@ db.connect((err)=>{
     else
         console.log('Connection with mysql database established');
 });
+
+function findistance(point1,point2){
+    var ans = Math.sqrt(Math.pow(point1[0]-point2[0],2)+ Math.pow(point1[1]-point2[1],2));
+    return ans;
+}
+
+function optimizeAmbulanceLocation(disease_name){
+    db.query(`select x,y from Patient_records where disease='${disease_name}' order by ID desc limit 100;`,(err,train_points)=>{
+        db.query(`select vehicle_no from Ambulance_loc where vehicle_no in (select Amb.vehicle_no from (select vehicle_no from Ambulance
+            where tools in (select Tools from Diseases where Disease='${disease_name}')) as Amb group by Amb.vehicle_no 
+            having count(Amb.vehicle_no)=(select count(Tools) from Diseases where Disease='${disease_name}'))`,(err,ambulance_ids)=>{
+                train_pts = []
+                for (pt of train_points){ 
+                    train_pts.push([pt.x,pt.y]);
+                }
+                // console.log(train_pts)
+                var no_of_clusters = ambulance_ids.length;
+                km(train_pts,no_of_clusters,ambulance_ids);
+        })      
+    })
+};
+
+function km(test,k_value,ambs_nos){
+    kmeans.clusterize(test,{k:k_value},(req,res,err)=>{
+        if(err) throw err;
+        else{
+            // console.log('clusterised');
+            // console.log('%o',res);
+            // console.log(res[0].centroid);
+            // centroids = []
+            console.log('ambs_nos',ambs_nos[0].vehicle_no);
+            count = 0;
+            for (i of res){
+                console.log('Centroid',count,Math.floor(i.centroid[0]),Math.floor(i.centroid[1]));
+                console.log('Values',count,Math.floor(i.centroid[0]),Math.floor(i.centroid[1]),ambs_nos[count].vehicle_no);
+                db.query(`update Ambulance_loc set x='${Math.floor(i.centroid[0])}', y='${Math.floor(i.centroid[1])}' where vehicle_no='${ambs_nos[count].vehicle_no}'`,(err,results)=>{
+                    if(err) throw err;
+                    else{
+                        console.log('Ambulance Location Optimized',results);
+                    }
+                });
+            count++;
+            }
+            db.query(`select * from Ambulance_loc`, (err,results)=>{
+                if(err) throw err;
+                console.log(results);
+            });
+        }
+    })
+};
+
 
 app.get('/createtable',(req,res)=>{
     db.query('Create table User(name varchar(20), username varchar(20))',(err,results)=>{
@@ -194,7 +228,6 @@ app.post('/',urlencodedparser,(req,res)=>{
                     }
                     //Ambulance found
                     console.log(results[min_index]);
-
                 }
                 amb_vehicle_no = results[min_index].vehicle_no
                 data.push({vehicle_no:results[min_index].vehicle_no,x:results[min_index].x,y:results[min_index].y,problem:req.body.problem,base_fare:results[min_index].base_fare,charge_per_km:results[min_index].charge_per_km});
@@ -234,6 +267,8 @@ app.post('/',urlencodedparser,(req,res)=>{
         });
         });
         // console.log('inside else',data)
+        // console.log('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
+        // optimizeAmbulanceLocation(req.body.problem);
     }
 });
 
@@ -272,5 +307,5 @@ app.post('/dashboard',(req,res)=>{
 })
 
 
-module.exports=app;
+module.exports={app,optimizeAmbulanceLocation};
 

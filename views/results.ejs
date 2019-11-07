@@ -117,7 +117,7 @@
                                         <td id="vehicle"><%= data[0].vehicle_no %></td>
                                         <td><%= data[0].x %>-<%= data[0].y %></td>
                                         <% if(typeof(data[0].problem)== 'string') %>
-                                        <td><%= data[0].problem %></td>
+                                        <td id="problem"><%= data[0].problem %></td>
                                         <td><%= data[2].driver_name %></td>
                                         <td><%= data[2].contact_no %></td>
                                     </tr>
@@ -224,13 +224,27 @@
     <script src="js/accordion.js"></script>
 
     <script>
-        document.getElementById('confirm').addEventListener('click', (e) => {
-            //e.preventDefault();
-            console.log("he")
-            var vehicle = document.getElementById('vehicle');
-            console.log(vehicle.innerHTML);
-            var x = vehicle.innerHTML;
-            var path = '/ambulance/change_status_available/5';
+            document.getElementById('confirm').addEventListener('click',(e)=>{
+                //e.preventDefault();
+                console.log("he")
+                var vehicle=document.getElementById('vehicle');
+                console.log(vehicle.innerHTML);
+                var x=vehicle.innerHTML;
+                var path = '/ambulance/change_status_available/5';
+                var problem = document.getElementById('problem').innerHTML;
+                fetch('/ambulance/confirmation/'+x,{
+                                            method: 'post',
+                                            headers: {'Content-Type': 'application/json'},
+                                            body: JSON.stringify({"problem":problem}),
+                                        })
+                                        .then((response)=>{
+                                            return response.json()
+                                        })
+                                        .then((data)=>{
+                                            console.log('Post request created',data);
+                                            document.getElementById('confirm').style.visibility="hidden";
+                                            document.getElementById('after_post').innerHTML="Your Ambulance is On the Way";
+                                        });
 
             var arr = [];
             arr.push({

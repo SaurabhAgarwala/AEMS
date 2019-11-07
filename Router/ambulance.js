@@ -5,15 +5,17 @@ var passport=require('passport');
 var mysql=require('mysql');
 var io=require('../app.js')
 
+var optimizeAmbulanceLocation = require('./index.js').optimizeAmbulanceLocation
 
 var router=express.Router()
 
 var db = mysql.createConnection({
     host     : 'localhost',
-    user     : '17shashank17',
-    password : 'lelopassword@',
+    user     : 'saurabh',
+    password : 'Saurabh@2021',
     database : 'aems'
 });
+
 db.connect((err)=>{
     if(err) throw err;
     else
@@ -119,10 +121,15 @@ router.post('/confirmation/:vehicle_no',(req,res)=>{
         if(err) console.log('Error ocuured while updation');
         else{
             console.log('updated');
+            console.log('####################################################################################');
+            console.log(req.body.problem);
             io.sockets.on('connection',(socket)=>{
                 console.log('inside amulance io');
                 io.sockets.emit('send detail to driver',{patient:'yes done'});
             })
+            console.log('ends here  ')
+            optimizeAmbulanceLocation(req.body.problem)
+            console.log('starts here')
             res.json(JSON.stringify({'status':'Booked'}))
         }
     })
