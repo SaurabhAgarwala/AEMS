@@ -4,6 +4,6 @@ module.exports={
             return next();
         }
         req.flash('error_msg','Please Login To Continue!');
-        res.redirect('/user/login');
+        res.redirect('/ambulance/login');
     }
 }

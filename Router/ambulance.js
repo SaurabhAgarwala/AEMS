@@ -3,6 +3,8 @@ var express=require('express');
 var passport=require('passport');
 
 var mysql=require('mysql');
+var io=require('../app.js')
+
 
 var router=express.Router()
 
@@ -117,6 +119,10 @@ router.post('/confirmation/:vehicle_no',(req,res)=>{
         if(err) console.log('Error ocuured while updation');
         else{
             console.log('updated');
+            io.sockets.on('connection',(socket)=>{
+                console.log('inside amulance io');
+                io.sockets.emit('send detail to driver',{patient:'yes done'});
+            })
             res.json(JSON.stringify({'status':'Booked'}))
         }
     })

@@ -1,6 +1,6 @@
 var express=require('express')
 var mysql=require('mysql');
-var io=require('../app');
+var io=require('../app.js');
 
 const kmeans=require('node-kmeans');
 var reader=require('csv-reader');
@@ -18,8 +18,6 @@ kmeans.clusterize(points,{k:3},(req,res,err)=>{
 })*/
 
 var app=express.Router();
-
-console.log(io)
 
 var ejs=require('ejs');
 var bodyparser=require('body-parser');
@@ -149,9 +147,12 @@ app.post('/',urlencodedparser,(req,res)=>{
                     // console.log('these results', results)
                     data.push({contact_no:results[0].contact_no, driver_name:results[0].driver_name})
                     // console.log('inside if',data);
+                    console.log('above io');
                     io.sockets.on('connection',(socket)=>{
+                        console.log("inside io")
                         io.sockets.emit('send detail to driver',{patient:'YEs Done'})
                     });
+                    console.log('below io');
                     res.render('results',{data:data});
                 }
             });

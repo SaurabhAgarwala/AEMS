@@ -5,7 +5,8 @@ var ejslayout=require('express-ejs-layouts');
 var path=require('path')
 
 var server=require('http').createServer(app);
-
+var io=require('socket.io').listen(server);
+module.exports=io;
 
 
 
@@ -65,10 +66,11 @@ mongoose.connect(db,{useUnifiedTopology:true,useNewUrlParser:true})
 app.use('/',require('./Router/index.js'));
 app.use('/ambulance',require('./Router/ambulance.js'));
 
-var io=require('socket.io').listen(server);
+
 
 server.listen(8080,()=>{
     console.log('connected to the server');
 })
 
-module.exports=io;
+
+
