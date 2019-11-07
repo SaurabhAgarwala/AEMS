@@ -53,11 +53,17 @@ app.get('/createtable',(req,res)=>{
 });
 
 app.get('/dashboard/register',ensureAuthenticated,(req,res)=>{
+
     db.query(`Select vehicle_no from Ambulance_driver where driver_name='${req.user.username}'`,(err,result)=>{
         if(err) console.log('Error occured dashboard_register')
         else{
             console.log(result);
-            res.render('ambulance_register');
+            if(result.length>0){
+                req.flash('success_msg','Your ambulance is registered')
+                res.redirect('/dashboard')
+            }
+            else
+                res.render('ambulance_register');
             // only unregistered people can visit 
         }
     })
@@ -229,7 +235,6 @@ app.post('/',urlencodedparser,(req,res)=>{
         });
         // console.log('inside else',data)
     }
-    
 });
 
 app.get('/dashboard',ensureAuthenticated,(req,res)=> {
@@ -239,8 +244,10 @@ app.get('/dashboard',ensureAuthenticated,(req,res)=> {
         if(err) console.log('Error');
         else{
             console.log(result)
-            console.log(result[0].status)
-            res.render('dashboard',{username:req.user.username,status:result[0].status,vehicle_no:result[0].vehicle_no})
+            if(result.length==0)
+                res.render('dashboard',{username:req.user.username})
+            else
+                res.render('dashboard',{username:req.user.username,status:result[0].status,vehicle_no:result[0].vehicle_no})
         }
     })
     

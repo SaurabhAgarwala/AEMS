@@ -78,10 +78,11 @@
                                         <a class="dropdown-item" href="single-blog.html">Single blog</a>
                                     </div>
                                 </li>
-
+                                <% if(typeof(vehicle_no)!='string') {%>
                                 <li class="nav-item">
                                     <a class="nav-link" href="/dashboard/register">Register Your Ambulance</a>
                                 </li>
+                                <% } %>
                             </ul>
                         </div>
                         <a class="btn_2 d-none d-lg-block" href="/ambulance/logout">Logout <%= username %></a>
@@ -101,14 +102,16 @@
                         <div class="banner_text_iner">
                             <h5>We are here for your care</h5>
                             <h1>Emergency Ambulance Call</h1>
-                            <label>Ambulance Number</label>
-                            <h2><%= vehicle_no %></h2>
+                            <% if(typeof(vehicle_no)=='string') {%>
+                                <label>Ambulance Number</label>
+                                <h2><%= vehicle_no %></h2>
                     
-                            <label>Current Status: </label>
+                                <label>Current Status: </label>
                             
-                            <h2 id="status"><%= status %></h2>
-                            <button class="btn-success" href="" name="change-status" id="change-avl-status">I'm available now</button>
-                            <p>Find the quickest ambulance or one with special facilities as per your requirements.
+                                <h2 id="status"><%= status %></h2>
+                                <button class="btn-success" href="" name="change-status" id="change-avl-status">I'm available now</button>
+                            <% } %>
+                                <p>Find the quickest ambulance or one with special facilities as per your requirements.
                                 Simple interface and easy to use </p>
                                 <div id="new_booking">
 
