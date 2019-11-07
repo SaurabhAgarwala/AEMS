@@ -2642,7 +2642,7 @@ ul {
 .banner_part .banner_text .banner_text_iner {
   display: table-cell;
   vertical-align: middle;
-  padding-top: 155px;
+  padding-top: 10px;
 }
 
 @media (max-width: 991px) {
