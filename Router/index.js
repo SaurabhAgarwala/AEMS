@@ -163,14 +163,14 @@ app.post('/',urlencodedparser,(req,res)=>{
     else{
         var data=[];
         var amb_vehicle_no = 0;
-        db.query(`insert into Patient_records values('${req.body.x}','${req.body.y}','${req.body.problem}')`,(err,results)=>{
+        db.query(`insert into Patient_records(x,y,disease) values('${req.body.x}','${req.body.y}','${req.body.problem}')`,(err,results)=>{
             if(err) throw err;
             else console.log("insertion complete");
 
         });
         var min=20000;
         var min_index=0;
-        db.query(`select x,y,vehicle_no from Ambulance_loc where vehicle_no in (select Amb.vehicle_no from (select vehicle_no from Ambulance
+        db.query(`select x,y,vehicle_no,base_fare,charge_per_km from Ambulance_loc where status='Available' and vehicle_no in (select Amb.vehicle_no from (select vehicle_no from Ambulance
             where tools in (select Tools from Diseases where Disease='${req.body.problem}')) as Amb group by Amb.vehicle_no
             having count(Amb.vehicle_no)=(select count(Tools) from Diseases where Disease='${req.body.problem}'))`,(err,results)=>{
                 if(err) throw err;
@@ -191,7 +191,7 @@ app.post('/',urlencodedparser,(req,res)=>{
 
                 }
                 amb_vehicle_no = results[min_index].vehicle_no
-                data.push({vehicle_no:results[min_index].vehicle_no,x:results[min_index].x,y:results[min_index].y,problem:req.body.problem});
+                data.push({vehicle_no:results[min_index].vehicle_no,x:results[min_index].x,y:results[min_index].y,problem:req.body.problem,base_fare:results[min_index].base_fare,charge_per_km:results[min_index].charge_per_km});
         });
         db.query(`Select * from Hospitals`,(err,results)=>{
             if(err) throw err;
@@ -210,7 +210,9 @@ app.post('/',urlencodedparser,(req,res)=>{
                 //Hospital Found
                 console.log(results[min_index]);
             }
-            data.push({hid:results[min_index].ID,x:results[min_index].x,y:results[min_index].y});
+            total_distance = min_dist;
+            var cost = data[0].base_fare + (min_dist*data[0].charge_per_km);
+            data.push({hid:results[min_index].ID,x:results[min_index].x,y:results[min_index].y,cost:parseInt(cost), distance:min_dist});
             // console.log('data',data);
             // res.render('results',{data:data});
         //send optimised ambulance and hospital id
@@ -253,8 +255,7 @@ app.post('/dashboard/change_status',(req,res)=>{
                 console.log('updation done');
                 res.json(JSON.stringify({'a':'done'}));
             }
-        })
-    
+        })  
 })
 
 app.post('/dashboard',(req,res)=>{
