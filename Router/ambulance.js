@@ -11,8 +11,8 @@ var router=express.Router()
 
 var db = mysql.createConnection({
     host     : 'localhost',
-    user     : 'saurabh',
-    password : 'Saurabh@2021',
+    user     : '17shashank17',
+    password : 'lelopassword@',
     database : 'aems'
 });
 
@@ -116,7 +116,7 @@ router.post('/change_status_available/:vehicle_no',(req,res)=>{
     res.json(JSON.stringify({'status':'available'}));
 });
 
-router.post('/confirmation/:vehicle_no',(req,res)=>{
+/*router.post('/confirmation/:vehicle_no',(req,res)=>{
     db.query(`update Ambulance_loc set status='Not Available' where vehicle_no='${req.params.vehicle_no}'`,(err,result)=>{
         if(err) console.log('Error ocuured while updation');
         else{
@@ -127,9 +127,31 @@ router.post('/confirmation/:vehicle_no',(req,res)=>{
                 console.log('inside amulance io');
                 io.sockets.emit('send detail to driver',{patient:'yes done'});
             })
-            console.log('ends here  ')
-            optimizeAmbulanceLocation(req.body.problem)
-            console.log('starts here')
+            res.json(JSON.stringify({'status':'Booked'}));
+        }
+    })
+    //req.flash('success_msg','Your booked ambulance is on the way')
+    
+});*/
+
+var bodyparser=require('body-parser');
+urlencoded=bodyparser.urlencoded({extended:true})
+
+router.post('/confirmation/:vehicle_no',urlencoded,(req,res)=>{
+    db.query(`update Ambulance_loc set status='Not Available' where vehicle_no='${req.params.vehicle_no}'`,(err,result)=>{
+        if(err) console.log('Error ocuured while updation');
+        else{
+            console.log('updated');
+            console.log('####################################################################################');
+            io.sockets.on('connection',(socket)=>{
+                console.log('inside amulance io');
+                io.sockets.emit('send detail to driver',{patient:'yes done',vehicle_no:req.params.vehicle_no});
+            })
+            console.log('ends here  ');
+            console.log('problem',req.body.problem)
+            if(req.body.problem!='')
+                optimizeAmbulanceLocation(req.body.problem)
+            console.log('starts here');
             res.json(JSON.stringify({'status':'Booked'}))
         }
     })

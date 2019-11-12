@@ -16,8 +16,8 @@ urlencodedparser=bodyparser.urlencoded({extended: false});
 
 var db = mysql.createConnection({
     host     : 'localhost',
-    user     : 'saurabh',
-    password : 'Saurabh@2021',
+    user     : '17shashank17',
+    password : 'lelopassword@',
     database : 'aems'
 });
 
@@ -34,6 +34,8 @@ function findistance(point1,point2){
 
 function optimizeAmbulanceLocation(disease_name){
     db.query(`select x,y from Patient_records where disease='${disease_name}' order by ID desc limit 100;`,(err,train_points)=>{
+        console.log('train pts',train_points)
+        console.log('name',disease_name);
         db.query(`select vehicle_no from Ambulance_loc where vehicle_no in (select Amb.vehicle_no from (select vehicle_no from Ambulance
             where tools in (select Tools from Diseases where Disease='${disease_name}')) as Amb group by Amb.vehicle_no 
             having count(Amb.vehicle_no)=(select count(Tools) from Diseases where Disease='${disease_name}'))`,(err,ambulance_ids)=>{
@@ -41,7 +43,7 @@ function optimizeAmbulanceLocation(disease_name){
                 for (pt of train_points){ 
                     train_pts.push([pt.x,pt.y]);
                 }
-                // console.log(train_pts)
+                console.log('train pts',train_pts)
                 var no_of_clusters = ambulance_ids.length;
                 km(train_pts,no_of_clusters,ambulance_ids);
         })      
@@ -106,11 +108,11 @@ app.get('/dashboard/register',ensureAuthenticated,(req,res)=>{
 
 app.post('/dashboard/register',ensureAuthenticated,(req,res)=>{
     console.log(req.user.username)
-    db.query(`insert into Ambulance values('${req.body.ambulance_number}','${req.body.equipment}')`,(err,result)=>{
+    db.query(`insert into Ambulance values('${req.body.ambulance_number}','${req.body.equipments}')`,(err,result)=>{
         if(err) console.log("Error 1")
         else console.log("insertion 1 complete");
     })
-    db.query(`insert into Ambulance_loc values('${req.body.ambulance_number}','${50}','${50}','Available',${500},${20})`,(err,result)=>{
+    db.query(`insert into Ambulance_loc values('${req.body.ambulance_number}','${50}','${50}',${500},${20},'Available')`,(err,result)=>{
         if(err) console.log("Error 2")
         else console.log("insertion 2 complete");
     })
@@ -138,7 +140,7 @@ app.post('/',urlencodedparser,(req,res)=>{
         var data=[];
         var amb_vehicle_no = 0;
         var total_distance = 0;
-        db.query(`Select * from Ambulance_loc where status='available'`,(err,results)=>{
+        db.query(`Select * from Ambulance_loc where status='Available'`,(err,results)=>{
             // console.log(results);
             var points=[];
             k=0;
@@ -187,12 +189,6 @@ app.post('/',urlencodedparser,(req,res)=>{
                     // console.log('these results', results)
                     data.push({contact_no:results[0].contact_no, driver_name:results[0].driver_name})
                     // console.log('inside if',data);
-                    console.log('above io');
-                    io.sockets.on('connection',(socket)=>{
-                        console.log("inside io")
-                        io.sockets.emit('send detail to driver',{patient:'YEs Done'})
-                    });
-                    console.log('below io');
                     res.render('results',{data:data});
                 }
             });
@@ -218,6 +214,8 @@ app.post('/',urlencodedparser,(req,res)=>{
                     var min_dist=20000;
                     var min_index=-1
                     var k=0;
+                    console.log('%%%%',results.length)
+                    if(results.length>0){
                     for (i of results){
                         x=findistance([i.x,i.y],[req.body.x,req.body.y])
                         if(x<min_dist){
@@ -228,47 +226,146 @@ app.post('/',urlencodedparser,(req,res)=>{
                     }
                     //Ambulance found
                     console.log(results[min_index]);
-                }
+                
                 amb_vehicle_no = results[min_index].vehicle_no
                 data.push({vehicle_no:results[min_index].vehicle_no,x:results[min_index].x,y:results[min_index].y,problem:req.body.problem,base_fare:results[min_index].base_fare,charge_per_km:results[min_index].charge_per_km});
-        });
-        db.query(`Select * from Hospitals`,(err,results)=>{
-            if(err) throw err;
-            else{
-                var min_dist=20000;
-                var min_index=-1;
-                var k=0;
-                for (i of results){
-                    x=findistance([i.x,i.y],[req.body.x,req.body.y])
-                    if(x<min_dist){
-                        min_dist=x;
-                        min_index=k;
+                db.query(`Select * from Hospitals`,(err,results)=>{
+                    if(err) throw err;
+                    else{
+                        var min_dist=20000;
+                        var min_index=-1;
+                        var k=0;
+                        for (i of results){
+                            x=findistance([i.x,i.y],[req.body.x,req.body.y])
+                            if(x<min_dist){
+                                min_dist=x;
+                                min_index=k;
+                            }
+                            k+=1;
+                        }
+                        //Hospital Found
+                        console.log(results[min_index]);
                     }
-                    k+=1;
+                    console.log('@@@@@@',data)
+                    total_distance = min_dist;
+                    var cost = data[0].base_fare + (min_dist*data[0].charge_per_km);
+                    data.push({hid:results[min_index].ID,x:results[min_index].x,y:results[min_index].y,cost:parseInt(cost), distance:min_dist});
+                    // console.log('data',data);
+                    // res.render('results',{data:data});
+                //send optimised ambulance and hospital id
+                    console.log('Ambulance number',amb_vehicle_no);
+                    db.query(`select * from Ambulance_driver where vehicle_no='${amb_vehicle_no}'`,(err,results)=>{
+                    if(err) console.log('this is the error', results);
+                    else{
+                        data.push({contact_no:results[0].contact_no, driver_name:results[0].driver_name})
+                        res.render('results',{data:data});
+                    }
+                });
+            });
+            }
+                else{
+                    console.log('entered in else')
+                    db.query(`Select * from Ambulance_loc where status='Available'`,(err,results)=>{
+                        console.log('query executed');
+                        if(err) throw console.log("Error Occured");
+                        else{
+                            
+                        var points=[];
+                        k=0;
+                        min_distance=99999;
+                        min_distance_index=-1;
+                        console.log('results',results)
+                        for (i of results){
+                            var distance=findistance([req.body.x,req.body.y],[i.x,i.y])
+                            if (distance<min_distance){
+                                min_distance=distance;
+                                min_distance_index=k;
+                            }
+                            k+=1;
+                        }
+                        // console.log(results[min_distance_index].vehicle_no);
+                        amb_vehicle_no = results[min_distance_index].vehicle_no
+                        data.push({vehicle_no:results[min_distance_index].vehicle_no,x:results[min_distance_index].x,y:results[min_distance_index].y, 
+                            base_fare:results[min_distance_index].base_fare, charge_per_km:results[min_distance_index].charge_per_km});
+                        console.log('#####',data)
+                        }
+                    });
+                    db.query(`Select * from Hospitals`,(err,results)=>{
+                        if(err) throw err;
+                        else{
+                            var min_dist=20000;
+                            var min_index=-1;
+                            var k=0;
+                            for (i of results){
+                                x=findistance([i.x,i.y],[req.body.x,req.body.y])
+                                if(x<min_dist){
+                                    min_dist=x;
+                                    min_index=k;
+                                }
+                                k+=1;
+                            }
+                            //Hospital Found
+                            console.log(results[min_index]);
+                        }
+                        console.log('@@@@@@',data)
+                        total_distance = min_dist;
+                        var cost = data[0].base_fare + (min_dist*data[0].charge_per_km);
+                        data.push({hid:results[min_index].ID,x:results[min_index].x,y:results[min_index].y,cost:parseInt(cost), distance:min_dist});
+                        // console.log('data',data);
+                        // res.render('results',{data:data});
+                    //send optimised ambulance and hospital id
+                        console.log('Ambulance number',amb_vehicle_no);
+                        db.query(`select * from Ambulance_driver where vehicle_no='${amb_vehicle_no}'`,(err,results)=>{
+                        if(err) console.log('this is the error', results);
+                        else{
+                            data.push({
+                                contact_no:results[0].contact_no, 
+                                driver_name:results[0].driver_name,
+                                statement:'Ambulance according to disease is not available. Sending you the nearest Ambulance'
+                            })
+                            console.log('@@@@@@data',data)
+                            res.render('results',{data:data});
+                        }
+                    });
+                });
+
                 }
-                //Hospital Found
-                console.log(results[min_index]);
-            }
-            total_distance = min_dist;
-            var cost = data[0].base_fare + (min_dist*data[0].charge_per_km);
-            data.push({hid:results[min_index].ID,x:results[min_index].x,y:results[min_index].y,cost:parseInt(cost), distance:min_dist});
-            // console.log('data',data);
-            // res.render('results',{data:data});
-        //send optimised ambulance and hospital id
-            console.log('Ambulance number',amb_vehicle_no);
-            db.query(`select * from Ambulance_driver where vehicle_no='${amb_vehicle_no}'`,(err,results)=>{
-            if(err) console.log('this is the error', results);
-            else{
-                //console.log('these results', results)
-                data.push({contact_no:results[0].contact_no, driver_name:results[0].driver_name})
-                //console.log('inside else query',data);
-                res.render('results',{data:data});
-            }
+        }
         });
-        });
-        // console.log('inside else',data)
-        // console.log('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
-        // optimizeAmbulanceLocation(req.body.problem);
+    //     db.query(`Select * from Hospitals`,(err,results)=>{
+    //         if(err) throw err;
+    //         else{
+    //             var min_dist=20000;
+    //             var min_index=-1;
+    //             var k=0;
+    //             for (i of results){
+    //                 x=findistance([i.x,i.y],[req.body.x,req.body.y])
+    //                 if(x<min_dist){
+    //                     min_dist=x;
+    //                     min_index=k;
+    //                 }
+    //                 k+=1;
+    //             }
+    //             //Hospital Found
+    //             console.log(results[min_index]);
+    //         }
+    //         console.log('@@@@@@',data)
+    //         total_distance = min_dist;
+    //         var cost = data[0].base_fare + (min_dist*data[0].charge_per_km);
+    //         data.push({hid:results[min_index].ID,x:results[min_index].x,y:results[min_index].y,cost:parseInt(cost), distance:min_dist});
+    //         // console.log('data',data);
+    //         // res.render('results',{data:data});
+    //     //send optimised ambulance and hospital id
+    //         console.log('Ambulance number',amb_vehicle_no);
+    //         db.query(`select * from Ambulance_driver where vehicle_no='${amb_vehicle_no}'`,(err,results)=>{
+    //         if(err) console.log('this is the error', results);
+    //         else{
+    //             data.push({contact_no:results[0].contact_no, driver_name:results[0].driver_name})
+    //             res.render('results',{data:data});
+    //         }
+    //     });
+    // });
+
     }
 });
 

@@ -1,0 +1,7 @@
+1) frontend for login, register,register_ambulance
+2) sockets
+3) if ambulance is not avialable according to disease then send normal ambulance
+4) end points handle
+5) make equipment multivalued checkbox
+6) bill generation according to special ambulance
+7) 
