@@ -1,278 +1,180 @@
-<!doctype html>
-<html lang="en">
+<!--::header part start::-->
+<header class="main_menu home_menu">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-12">
+                <nav class="navbar navbar-expand-lg navbar-light">
+                    <a class="navbar-brand" href="index.html"> <img src="img/logo.png" alt="logo"> </a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse"
+                        data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
 
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>medical</title>
-    <link rel="icon" href="img/favicon.png">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <!-- animate CSS -->
-    <link rel="stylesheet" href="css/animate.css">
-    <!-- owl carousel CSS -->
-    <link rel="stylesheet" href="css/owl.carousel.min.css">
-    <!-- themify CSS -->
-    <link rel="stylesheet" href="css/themify-icons.css">
-    <!-- flaticon CSS -->
-    <link rel="stylesheet" href="css/flaticon.css">
-    <!-- magnific popup CSS -->
-    <link rel="stylesheet" href="css/magnific-popup.css">
-    <!-- nice select CSS -->
-    <link rel="stylesheet" href="css/nice-select.css">
-    <!-- swiper CSS -->
-    <link rel="stylesheet" href="css/slick.css">
-    <!-- style CSS -->
-    <link rel="stylesheet" href="css/style.css">
-    <!-- Accordion CSS -->
-    <link rel="stylesheet" href="css/accordion.css">
-</head>
+                    <div class="collapse navbar-collapse main-menu-item justify-content-center"
+                        id="navbarSupportedContent">
+                        <ul class="navbar-nav align-items-center">
+                            <li class="nav-item active">
+                                <a class="nav-link" href="/">Home</a>
+                            </li>
 
-<body>
-    <!--::header part start::-->
-    <header class="main_menu home_menu">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-12">
-                    <nav class="navbar navbar-expand-lg navbar-light">
-                        <a class="navbar-brand" href="index.html"> <img src="img/logo.png" alt="logo"> </a>
-                        <button class="navbar-toggler" type="button" data-toggle="collapse"
-                            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="blog.html" id="navbarDropdown" role="button"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Pages
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="services.html">services</a>
+                                    <a class="dropdown-item" href="dep.html">depertments</a>
+                                    <a class="dropdown-item" href="elements.html">Elements</a>
+                                </div>
+                            </li>
 
-                        <div class="collapse navbar-collapse main-menu-item justify-content-center"
-                            id="navbarSupportedContent">
-                            <ul class="navbar-nav align-items-center">
-                                <li class="nav-item active">
-                                    <a class="nav-link" href="/main.ejs">Home</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/about.html">about</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/Doctor.html">Doctors</a>
-                                </li>
-
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="blog.html" id="navbarDropdown"
-                                        role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Pages
-                                    </a>
-                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="services.html">services</a>
-                                        <a class="dropdown-item" href="dep.html">depertments</a>
-                                        <a class="dropdown-item" href="elements.html">Elements</a>
-                                    </div>
-                                </li>
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="blog.html" id="navbarDropdown_1"
-                                        role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        blog
-                                    </a>
-                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown_1">
-                                        <a class="dropdown-item" href="blog.html">blog</a>
-                                        <a class="dropdown-item" href="single-blog.html">Single blog</a>
-                                    </div>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a class="nav-link" href="contact.html">Contact</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <a class="btn_2 d-none d-lg-block" href="#">HOT LINE- 09856</a>
-                    </nav>
-                </div>
+                            <li class="nav-item">
+                                <a class="nav-link" href="contact.html">Contact</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <a class="btn_2 d-none d-lg-block" href="/ambulance/login">Login</a>
+                </nav>
             </div>
         </div>
-    </header>
-    <!-- Header part end-->
+    </div>
+</header>
+<!-- Header part end-->
 
-    <!-- banner part start-->
-    <% include ./partials/msg.ejs %>
-    <section class="banner_part">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6">
-                    <div class="banner_text">
-                        <div class="banner_text_iner">
-                            <h1>Emergency Ambulance Called</h1>
+<!-- banner part start-->
+<% include ./partials/msg.ejs %>
+<section class="banner_part">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div class="banner_text">
+                    <div class="banner_text_iner">
+                        <h1>Emergency Ambulance Called</h1>
 
 
-                            <div>
-                                <h3>Ambulance data:</h3>
-                                <table class="table table-bordered table-striped">
-                                    <tr>
-                                        <th>Ambulance Vehicle No.</th>
-                                        <th>Location coordinate</th>
-                                        <% if(typeof(data[0].problem)== 'string') %>
-                                        <th>Problem</th>
-                                        <th>Driver Name</th>
-                                        <th>Driver Contact Number</th>
-                                    </tr>
-                                    <tr>
-                                        <td id="vehicle"><%= data[0].vehicle_no %></td>
-                                        <td><%= data[0].x %>-<%= data[0].y %></td>
-                                        <% if(typeof(data[0].problem)== 'string') %>
-                                        <td id="problem"><%= data[0].problem %></td>
-                                        <td><%= data[2].driver_name %></td>
-                                        <td><%= data[2].contact_no %></td>
-                                    </tr>
-                                </table>
-                            </div>
-
-                            <h2 id="after_post"></h2>
-                            <button class="btn_2" href="" name="confirm_booking" id="confirm">Confirm Booking</button>
-                            <button class="btn_2" id="go_back" href="main.ejs">Go Back</button>
+                        <div>
+                            <h3>Ambulance data:</h3>
+                            <table class="table table-bordered table-striped">
+                                <tr>
+                                    <th>Ambulance Vehicle No.</th>
+                                    <th>Location coordinate</th>
+                                    <% if(typeof(data[0].problem)== 'string') %>
+                                    <th>Problem</th>
+                                    <th>Driver Name</th>
+                                    <th>Driver Contact Number</th>
+                                </tr>
+                                <tr>
+                                    <td id="vehicle"><%= data[0].vehicle_no %></td>
+                                    <td><%= data[0].x %>-<%= data[0].y %></td>
+                                    <% if(typeof(data[0].problem)== 'string') %>
+                                    <td id="problem"><%= data[0].problem %></td>
+                                    <td><%= data[2].driver_name %></td>
+                                    <td><%= data[2].contact_no %></td>
+                                </tr>
+                            </table>
                         </div>
+
+                        <h2 id="after_post"></h2>
+                        <button class="btn_2" href="" name="confirm_booking" id="confirm">Confirm Booking</button>
+                        <button class="btn_2" id="go_back" href="main.ejs">Go Back</button>
                     </div>
                 </div>
-                <div class="col-lg-6">
-                    <div class="banner_text">
-                        <div class="banner_text_iner">
-                            <h1>Hospital alloted</h1>
+            </div>
+            <div class="col-lg-6">
+                <div class="banner_text">
+                    <div class="banner_text_iner">
+                        <h1>Hospital alloted</h1>
 
 
-                            <div>
-                                <h3>Hospital data:</h3>
+                        <div>
+                            <h3>Hospital data:</h3>
 
-                                <table class="table table-bordered table-striped">
-                                    <tr>
-                                        <th>Hospital ID</th>
-                                        <th>Location coordinate</th>
-                                    </tr>
-                                    <tr>
-                                        <td><%= data[1].hid %></td>
-                                        <td><%= data[1].x %>-<%= data[0].y %></td>
-                                    </tr>
-                                </table>
-                            </div>
-                            <div>
-                                <h3>Estimates Charges:</h3>
-                                <table class="table table-bordered table-striped">
-                                    <tr>
-                                        <th>Base Fare</th>
-                                        <th>Charges per km</th>
-                                        <th>Distance</th>
-                                        <th>Total Cost</th>
-                                    </tr>
-                                    <tr>
-                                        <td><%= data[0].base_fare %></td>
-                                        <td><%= data[0].charge_per_km %></td>
-                                        <td><%= parseInt(data[1].distance) %></td>
-                                        <td><%= data[1].cost %></td>
-                                    </tr>
-                                </table>
-                            </div>
+                            <table class="table table-bordered table-striped">
+                                <tr>
+                                    <th>Hospital ID</th>
+                                    <th>Location coordinate</th>
+                                </tr>
+                                <tr>
+                                    <td><%= data[1].hid %></td>
+                                    <td><%= data[1].x %>-<%= data[0].y %></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div>
+                            <h3>Estimates Charges:</h3>
+                            <table class="table table-bordered table-striped">
+                                <tr>
+                                    <th>Base Fare</th>
+                                    <th>Charges per km</th>
+                                    <th>Distance</th>
+                                    <th>Total Cost</th>
+                                </tr>
+                                <tr>
+                                    <td><%= data[0].base_fare %></td>
+                                    <td><%= data[0].charge_per_km %></td>
+                                    <td><%= parseInt(data[1].distance) %></td>
+                                    <td><%= data[1].cost %></td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- banner part start-->
+<!-- banner part start-->
 
-    <!-- footer part start-->
-    <footer class="footer-area">
-        <div class="copyright_part">
-            <div class="container">
-                <div class="row align-items-center">
-                    <p class="footer-text m-0 col-lg-8 col-md-12">
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                        Copyright &copy;<script>
-                            document.write(new Date().getFullYear());
-                        </script> All rights reserved | This template is made with <i class="ti-heart"
-                            aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                    </p>
-                    <div class="col-lg-4 col-md-12 text-center text-lg-right footer-social">
-                        <a href="#"><i class="ti-facebook"></i></a>
-                        <a href="#"> <i class="ti-twitter"></i> </a>
-                        <a href="#"><i class="ti-instagram"></i></a>
-                        <a href="#"><i class="ti-skype"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
 
-    <!-- footer part end-->
-
-    <!-- jquery plugins here-->
-
-    <script src="js/jquery-1.12.1.min.js"></script>
-    <!-- popper js -->
-    <script src="js/popper.min.js"></script>
-    <!-- bootstrap js -->
-    <script src="js/bootstrap.min.js"></script>
-    <!-- owl carousel js -->
-    <script src="js/owl.carousel.min.js"></script>
-    <script src="js/jquery.nice-select.min.js"></script>
-    <!-- contact js -->
-    <script src="js/jquery.ajaxchimp.min.js"></script>
-    <script src="js/jquery.form.js"></script>
-    <script src="js/jquery.validate.min.js"></script>
-    <script src="js/mail-script.js"></script>
-    <script src="js/contact.js"></script>
-    <!-- custom js -->
-    <script src="js/custom.js"></script>
-    <!-- accordion js -->
-    <script src="js/accordion.js"></script>
-
-    <script>
-            document.getElementById('confirm').addEventListener('click',(e)=>{
-                //e.preventDefault();
-                console.log("he")
-                var vehicle=document.getElementById('vehicle');
-                console.log(vehicle.innerHTML);
-                var x=vehicle.innerHTML;
-                var path = '/ambulance/change_status_available/5';
-                var problem = document.getElementById('problem').innerHTML;
-                fetch('/ambulance/confirmation/'+x,{
-                                            method: 'post',
-                                            headers: {'Content-Type': 'application/json'},
-                                            body: JSON.stringify({"problem":problem}),
-                                        })
-                                        .then((response)=>{
-                                            return response.json()
-                                        })
-                                        .then((data)=>{
-                                            console.log('Post request created',data);
-                                            document.getElementById('confirm').style.visibility="hidden";
-                                            document.getElementById('after_post').innerHTML="Your Ambulance is On the Way";
-                                        });
-
-            var arr = [];
-            arr.push({
-                'status': 'Available'
+<script>
+    document.getElementById('confirm').addEventListener('click', (e) => {
+        //e.preventDefault();
+        console.log("he")
+        var vehicle = document.getElementById('vehicle');
+        console.log(vehicle.innerHTML);
+        var x = vehicle.innerHTML;
+        var path = '/ambulance/change_status_available/5';
+        var problem = document.getElementById('problem').innerHTML;
+        fetch('/ambulance/confirmation/' + x, {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    "problem": problem
+                }),
+            })
+            .then((response) => {
+                return response.json()
+            })
+            .then((data) => {
+                console.log('Post request created', data);
+                document.getElementById('confirm').style.visibility = "hidden";
+                document.getElementById('after_post').innerHTML = "Your Ambulance is On the Way";
             });
-            fetch('/ambulance/confirmation/' + x, {
-                    method: 'post',
-                    body: arr,
-                })
-                .then((response) => {
-                    return response.json()
-                })
-                .then((data) => {
-                    console.log('Post request created', data);
-                    document.getElementById('confirm').style.visibility = "hidden";
-                    document.getElementById('after_post').innerHTML = "Your Ambulance is On the Way";
-                });
 
+        var arr = [];
+        arr.push({
+            'status': 'Available'
         });
-        document.getElementById('go_back').addEventListener('click', (e) => {
-            window.location = 'http://localhost:8080/';
-        })
-    </script>
+        fetch('/ambulance/confirmation/' + x, {
+                method: 'post',
+                body: arr,
+            })
+            .then((response) => {
+                return response.json()
+            })
+            .then((data) => {
+                console.log('Post request created', data);
+                document.getElementById('confirm').style.visibility = "hidden";
+                document.getElementById('after_post').innerHTML = "Your Ambulance is On the Way";
+            });
 
-</body>
-
-
-
-
-
-</html>
+    });
+    document.getElementById('go_back').addEventListener('click', (e) => {
+        window.location = 'http://localhost:8080/';
+    })
+</script>

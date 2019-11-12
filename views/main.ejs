@@ -1,42 +1,11 @@
-<!doctype html>
-<html lang="en">
 
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>medical</title>
-    <link rel="icon" href="img/favicon.png">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <!-- animate CSS -->
-    <link rel="stylesheet" href="css/animate.css">
-    <!-- owl carousel CSS -->
-    <link rel="stylesheet" href="css/owl.carousel.min.css">
-    <!-- themify CSS -->
-    <link rel="stylesheet" href="css/themify-icons.css">
-    <!-- flaticon CSS -->
-    <link rel="stylesheet" href="css/flaticon.css">
-    <!-- magnific popup CSS -->
-    <link rel="stylesheet" href="css/magnific-popup.css">
-    <!-- nice select CSS -->
-    <link rel="stylesheet" href="css/nice-select.css">
-    <!-- swiper CSS -->
-    <link rel="stylesheet" href="css/slick.css">
-    <!-- style CSS -->
-    <link rel="stylesheet" href="css/style.css">
-    <!-- Accordion CSS -->
-    <link rel="stylesheet" href="css/accordion.css">
-</head>
-
-<body>
     <!--::header part start::-->
     <header class="main_menu home_menu">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-12">
                     <nav class="navbar navbar-expand-lg navbar-light">
-                        <a class="navbar-brand" href="index.html"> <img src="img/logo.png" alt="logo"> </a>
+                        <a class="navbar-brand" href="index.html"> <h1>AEMS</h1> </a>
                         <button class="navbar-toggler" type="button" data-toggle="collapse"
                             data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                             aria-expanded="false" aria-label="Toggle navigation">
@@ -47,13 +16,7 @@
                             id="navbarSupportedContent">
                             <ul class="navbar-nav align-items-center">
                                 <li class="nav-item active">
-                                    <a class="nav-link" href="/main.ejs">Home</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/about.html">about</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/Doctor.html">Doctors</a>
+                                    <a class="nav-link" href="/">Home</a>
                                 </li>
 
                                 <li class="nav-item dropdown">
@@ -67,23 +30,13 @@
                                         <a class="dropdown-item" href="elements.html">Elements</a>
                                     </div>
                                 </li>
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="blog.html" id="navbarDropdown_1"
-                                        role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        blog
-                                    </a>
-                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown_1">
-                                        <a class="dropdown-item" href="blog.html">blog</a>
-                                        <a class="dropdown-item" href="single-blog.html">Single blog</a>
-                                    </div>
-                                </li>
 
                                 <li class="nav-item">
                                     <a class="nav-link" href="contact.html">Contact</a>
                                 </li>
                             </ul>
                         </div>
-                        <a class="btn_2 d-none d-lg-block" href="#">HOT LINE- 09856</a>
+                        <a class="btn_2 d-none d-lg-block" href="/ambulance/login">Login</a>
                     </nav>
                 </div>
             </div>
@@ -101,18 +54,17 @@
                             <h5>We are here for your care</h5>
                             <h1>Emergency Ambulance Call</h1>
 
-                            <a href="#" class="btn_2" id="quick">Find any ambulance</a><br>
-                            <div id="closest_ambulance" style="visibility: hidden;">
-                                <form method="POST" class="form-group">
+                            <a href="#" class="btn_2 accordion" id="quickk">Find any ambulance</a>
+                            <div class="panel">
+                                <form method="POST" class="form-group comment-form">
                                     <input class="form-control" type="text" , placeholder="X_coordinate" name="x">
                                     <input class="form-control" type="text" , placeholder="Y_coordinate" name="y">
                                     <input class="btn btn-primary" type="submit" value="Submit Details">
-
                                 </form>
                             </div>
-                            <a href="#" class="btn_2" id="best">Find a special one</a>
-                            <div id="ambulance_by_disease" style="visibility: hidden;">
-                                <form method="POST" class="form-group">
+                            <a href="#" class="btn_2 accordion" id="best">Find a special one</a>
+                            <div class="panel">
+                                <form method="POST" class="form-group comment-form">
                                     <input class="form-control" type="text" , placeholder="X_coordinate" name="x">
                                     <input class="form-control" type="text" , placeholder="Y_coordinate" name="y">
                                     <input class="form-control" type="text" , placeholder="Medical Problem"
@@ -121,24 +73,6 @@
 
                                 </form>
                             </div>
-
-                            <p>Find the quickest ambulance or one with special facilities as per your requirements.
-                                Simple interface and easy to use </p>
-                            <script>
-                                document.getElementById('quick').addEventListener('click', (e) => {
-                                    e.preventDefault();
-
-                                    document.getElementById('closest_ambulance').style.visibility = "visible";
-                                    document.getElementById('ambulance_by_disease').style.visibility = "hidden";
-                                });
-                                document.getElementById('best').addEventListener('click', (e) => {
-                                    e.preventDefault();
-
-                                    document.getElementById('ambulance_by_disease').style.visibility =
-                                        "visible";
-                                    document.getElementById('closest_ambulance').style.visibility = "hidden";
-                                })
-                            </script>
                         </div>
                     </div>
                 </div>
@@ -150,45 +84,28 @@
             </div>
         </div>
     </section>
-    <!-- banner part start-->
+    <!-- banner part e d-->
+    <script>
+        var acc = document.getElementsByClassName("accordion");
+        var i;
 
-    <!-- about us part start-->
-    <section class="about_us padding_top">
-        <div class="container">
-            <div class="row justify-content-between align-items-center">
-                <div class="col-md-6 col-lg-6">
-                    <div class="about_us_img">
-                        <img src="img/top_service.png" alt="">
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-5">
-                    <div class="about_us_text">
-                        <h2>About us</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit sed
-                            do eiusmod tempor incididunt ut labore et dolore magna aliqua
-                            Quis ipsum suspendisse ultrices gravida. Risus cmodo viverra
-                            maecenas accumsan lacus vel</p>
-                        <a class="btn_2 " href="#">learn more</a>
-                        <div class="banner_item">
-                            <div class="single_item">
-                                <img src="img/icon/banner_1.svg" alt="">
-                                <h5>Emergency</h5>
-                            </div>
-                            <div class="single_item">
-                                <img src="img/icon/banner_2.svg" alt="">
-                                <h5>Appointment</h5>
-                            </div>
-                            <div class="single_item">
-                                <img src="img/icon/banner_3.svg" alt="">
-                                <h5>Qualfied</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- about us part end-->
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function () {
+                /* Toggle between adding and
+                           removing the "active" class, to highlight the button that controls the panel */
+                this.classList.toggle("active"); /* Toggle between hiding and showing the active panel */
+                var
+                    panel = this.nextElementSibling;
+                if (panel.style.display === "block") {
+                    panel.style.display = "none";
+                } else {
+                    panel.style.display = "block";
+                }
+            });
+        }
+    </script>
+
+
 
     <!-- feature_part start-->
     <section class="feature_part">
@@ -247,96 +164,3 @@
     </section>
     <!-- feature_part start-->
 
-
-
-    <!--::regervation_part start::-->
-    <section class="regervation_part section_padding">
-        <div class="container">
-            <div class="row align-items-center regervation_content">
-                <div class="col-lg-12">
-                    <div class="regervation_part_iner">
-                        <form>
-                            <h2>Register a grievance</h2>
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <input type="email" class="form-control" id="inputEmail4" placeholder="Name">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <input type="password" class="form-control" id="inputPassword4"
-                                        placeholder="Email address">
-                                </div>
-                                <!-- <div class="form-group col-md-6">
-                                    <select class="form-control" id="Select">
-                                        <option value="1" selected>Select service</option>
-                                        <option value="2">Name of service</option>
-                                        <option value="3">Name of service</option>
-                                        <option value="4">Name of service</option>
-                                        <option value="5">Name of service</option>
-                                    </select>
-                                </div> -->
-                                <div class="form-group col-md-12">
-                                    <textarea class="form-control" id="Textarea" rows="4"
-                                        placeholder="Your Note "></textarea>
-                                </div>
-                            </div>
-                            <div class="regerv_btn">
-                                <a href="#" class="btn_2">Submit</a>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!--::regervation_part end::-->
-
-    <!-- footer part start-->
-    <footer class="footer-area">
-        <div class="copyright_part">
-            <div class="container">
-                <div class="row align-items-center">
-                    <p class="footer-text m-0 col-lg-8 col-md-12">
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                        Copyright &copy;<script>
-                            document.write(new Date().getFullYear());
-                        </script> All rights reserved
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                    </p>
-                    <div class="col-lg-4 col-md-12 text-center text-lg-right footer-social">
-                        <a href="#"><i class="ti-facebook"></i></a>
-                        <a href="#"> <i class="ti-twitter"></i> </a>
-                        <a href="#"><i class="ti-instagram"></i></a>
-                        <a href="#"><i class="ti-skype"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- footer part end-->
-
-    <!-- jquery plugins here-->
-
-    <script src="js/jquery-1.12.1.min.js"></script>
-    <!-- popper js -->
-    <script src="js/popper.min.js"></script>
-    <!-- bootstrap js -->
-    <script src="js/bootstrap.min.js"></script>
-    <!-- owl carousel js -->
-    <script src="js/owl.carousel.min.js"></script>
-    <script src="js/jquery.nice-select.min.js"></script>
-    <!-- contact js -->
-    <script src="js/jquery.ajaxchimp.min.js"></script>
-    <script src="js/jquery.form.js"></script>
-    <script src="js/jquery.validate.min.js"></script>
-    <script src="js/mail-script.js"></script>
-    <script src="js/contact.js"></script>
-    <!-- custom js -->
-    <script src="js/custom.js"></script>
-    <!-- accordion js -->
-    <script src="js/accordion.js"></script>
-
-
-</body>
-
-</html>
