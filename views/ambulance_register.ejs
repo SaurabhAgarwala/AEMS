@@ -1,23 +1,88 @@
+
+
 <style>
-        .box{
-            margin-top: 100px;
-        }
-        .box > input{
-            width: 200px;
-        }
-    </style>
-    
-    <div class="container box">
-        <% include ./partials/msg %>
-        <form action="/dashboard/register" method="post">
-            <div class="form-group">
-                <label>Ambulance Number</label>
-                <input type="text" id="username" class="form-control" name="ambulance_number">
-                <label>Equipments</label>
-                <input id="" type="text" class="form-control" name="equipments">
-                <label>Contact Number</label>
-                <input id="" type="number" class="form-control" name="contact_no"><br>
-                <input type="submit" class="btn-primary form-control" value="Register">
+    .box {
+        margin-top: 100px;
+    }
+
+    .box>input {
+        width: 200px;
+    }
+</style>
+<!--::header part start::-->
+<header class="main_menu home_menu">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-12">
+                <nav class="navbar navbar-expand-lg navbar-light">
+                    <a class="navbar-brand" href="/">
+                        <h1>AEMS</h1>
+                    </a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse"
+                        data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse main-menu-item justify-content-center"
+                        id="navbarSupportedContent">
+                        <ul class="navbar-nav align-items-center">
+
+                        </ul>
+                    </div>
+                </nav>
             </div>
-        </form>
+        </div>
     </div>
+</header>
+<!-- Header part end-->
+
+<!-- banner part start-->
+<section class="banner_part">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-12">
+                <div class="banner_text">
+                    <div class="banner_text_iner">
+                        <h1>Register your Ambulance</h1>
+
+                        <div class="container box">
+                            <% include ./partials/msg %>
+                            <form action="/dashboard/register" method="post">
+                                <div class="form-group">
+                                    <label>Ambulance Number</label>
+                                    <input type="text" id="username" class="form-control" name="ambulance_number">
+                                    <label>Equipments</label>
+                                    <input id="" type="text" class="form-control" name="equipments">
+                                    <label>Contact Number</label>
+                                    <input id="" type="number" class="form-control" name="contact_no"><br>
+                                    <input type="submit" class="btn-primary form-control" value="Register">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- banner part e d-->
+<script>
+    var acc = document.getElementsByClassName("accordion");
+    var i;
+
+    for (i = 0; i < acc.length; i++) {
+        acc[i].addEventListener("click", function () {
+            /* Toggle between adding and
+                       removing the "active" class, to highlight the button that controls the panel */
+            this.classList.toggle("active"); /* Toggle between hiding and showing the active panel */
+            var
+                panel = this.nextElementSibling;
+            if (panel.style.display === "block") {
+                panel.style.display = "none";
+            } else {
+                panel.style.display = "block";
+            }
+        });
+    }
+</script>

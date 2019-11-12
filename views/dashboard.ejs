@@ -16,7 +16,11 @@
                     <div class="collapse navbar-collapse main-menu-item justify-content-center"
                         id="navbarSupportedContent">
                         <ul class="navbar-nav align-items-center">
-
+                            <% if(typeof(vehicle_no)!='string') {%>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/dashboard/register">Register Your Ambulance</a>
+                            </li>
+                            <% } %>
                         </ul>
                     </div>
                     <a class="btn_2 d-none d-lg-block" href="/ambulance/logout">Logout <%= username %></a>
@@ -38,19 +42,19 @@
 
                         <% if(typeof(vehicle_no)=='string') {%>
                         <table class="table table-bordered table-striped">
-                        <tr>
-                            <th>Ambulance Number</th>
-                            <th>Current Status</th>
-                            <th>Toggle status</th>
-                        </tr>
-                        <tr>
-                            <td><%= vehicle_no %></td>
-                            <td>
-                                <h2 id="status"><%= status %></h2>
-                            </td>
-                            <td><button class="btn-success" href="" name="change-status" id="change-avl-status">I'm
-                                    available now</button></td>
-                        </tr>
+                            <tr>
+                                <th>Ambulance Number</th>
+                                <th>Current Status</th>
+                                <th>Toggle status</th>
+                            </tr>
+                            <tr>
+                                <td><%= vehicle_no %></td>
+                                <td>
+                                    <h2 id="status"><%= status %></h2>
+                                </td>
+                                <td><button class="btn-success" href="" name="change-status" id="change-avl-status">I'm
+                                        available now</button></td>
+                            </tr>
                         </table>
                         <% } %>
                         <div id="new_booking">
@@ -113,14 +117,14 @@
 <script src="https://code.jquery.com/jquery-latest.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script>
-    $(function(){
-        var socket=io.connect();
-        var $div=$('#new_booking');
-        var vehicle_no=document.getElementById('vehicle_id')
+    $(function () {
+        var socket = io.connect();
+        var $div = $('#new_booking');
+        var vehicle_no = document.getElementById('vehicle_id')
         console.log('waiting for event');
-        socket.on('send detail to driver',function(data){
-            console.log('data',data);
-            if(vehicle_no=data.vehicle_no){
+        socket.on('send detail to driver', function (data) {
+            console.log('data', data);
+            if (vehicle_no = data.vehicle_no) {
                 $div.text('<h1>New Booking!</h1>');
             }
         })
