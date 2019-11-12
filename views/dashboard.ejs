@@ -113,12 +113,16 @@
 <script src="https://code.jquery.com/jquery-latest.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script>
-    $(function () {
-        var socket = io.connect();
-        var $div = $('#new_booking');
+    $(function(){
+        var socket=io.connect();
+        var $div=$('#new_booking');
+        var vehicle_no=document.getElementById('vehicle_id')
         console.log('waiting for event');
-        socket.on('send detail to driver', function (data) {
-            console.log('data', data);
+        socket.on('send detail to driver',function(data){
+            console.log('data',data);
+            if(vehicle_no=data.vehicle_no){
+                $div.text('<h1>New Booking!</h1>');
+            }
         })
     })
 </script>
