@@ -183,7 +183,7 @@ app.post('/',urlencodedparser,(req,res)=>{
             total_distance = min_dist;
             var cost = data[0].base_fare + (min_dist*data[0].charge_per_km);
             // console.log('cost', cost);
-            data.push({hid:results[min_index].ID,x:results[min_index].x,y:results[min_index].y, cost:parseInt(cost), distance:min_dist});
+            data.push({hid:results[min_index].hid,x:results[min_index].x,y:results[min_index].y, cost:parseInt(cost), distance:min_dist});
             // console.log('inside if',data)
             // res.render('results',{data:data});
             console.log(amb_vehicle_no);
@@ -192,6 +192,10 @@ app.post('/',urlencodedparser,(req,res)=>{
                 else{
                     // console.log('these results', results)
                     data.push({contact_no:results[0].contact_no, driver_name:results[0].driver_name})
+                    data.push({
+                        patient_x:req.body.x,
+                        patient_y:req.body.y
+                    })
                     // console.log('inside if',data);
                     res.render('results',{data:data});
                 }
@@ -218,7 +222,6 @@ app.post('/',urlencodedparser,(req,res)=>{
                     var min_dist=20000;
                     var min_index=-1
                     var k=0;
-                    console.log('%%%%',results.length)
                     if(results.length>0){
                     for (i of results){
                         x=findistance([i.x,i.y],[req.body.x,req.body.y])
@@ -253,16 +256,39 @@ app.post('/',urlencodedparser,(req,res)=>{
                     console.log('@@@@@@',data)
                     total_distance = min_dist;
                     var cost = data[0].base_fare + (min_dist*data[0].charge_per_km);
-                    data.push({hid:results[min_index].ID,x:results[min_index].x,y:results[min_index].y,cost:parseInt(cost), distance:min_dist});
-                    // console.log('data',data);
-                    // res.render('results',{data:data});
-                //send optimised ambulance and hospital id
-                    console.log('Ambulance number',amb_vehicle_no);
+                    data.push({hid:results[min_index].hid,x:results[min_index].x,y:results[min_index].y,cost:parseInt(cost), distance:min_dist});
+                
                     db.query(`select * from Ambulance_driver where vehicle_no='${amb_vehicle_no}'`,(err,results)=>{
                     if(err) console.log('this is the error', results);
                     else{
                         data.push({contact_no:results[0].contact_no, driver_name:results[0].driver_name})
-                        res.render('results',{data:data});
+                        db.query(`select equipment_name,price from Equipments where equipment_name in (select Tools from Diseases where disease='${req.body.problem}')`,(err,prices)=>{
+                            if(err) throw err;
+                            else{
+                                var equipment_data=[];
+                                var sum_of_prices=0
+                                console.log(prices);
+                                data.push({
+                                    patient_x:req.body.x,
+                                    patient_y:req.body.y
+                                })
+                                for (i of prices){
+                                    equipment_data.push({
+                                        equipment_name: i.equipment_name,
+                                        price: i.price
+                                    });
+                                    sum_of_prices+=i.price;
+                                }
+                                console.log(equipment_data);
+                                data.push({
+                                    total_equipment_cost: sum_of_prices,
+                                    total_cost: sum_of_prices+cost
+                                });   
+                                console.log(data);
+                                res.render('results',{data:data,equipment_data:equipment_data});
+                            }
+                        })
+                        //res.render('results',{data:data});
                     }
                 });
             });
@@ -287,11 +313,9 @@ app.post('/',urlencodedparser,(req,res)=>{
                             }
                             k+=1;
                         }
-                        // console.log(results[min_distance_index].vehicle_no);
                         amb_vehicle_no = results[min_distance_index].vehicle_no
                         data.push({vehicle_no:results[min_distance_index].vehicle_no,x:results[min_distance_index].x,y:results[min_distance_index].y,
                             base_fare:results[min_distance_index].base_fare, charge_per_km:results[min_distance_index].charge_per_km});
-                        console.log('#####',data)
                         }
                     });
                     db.query(`Select * from Hospitals`,(err,results)=>{
@@ -311,13 +335,10 @@ app.post('/',urlencodedparser,(req,res)=>{
                             //Hospital Found
                             console.log(results[min_index]);
                         }
-                        console.log('@@@@@@',data)
                         total_distance = min_dist;
                         var cost = data[0].base_fare + (min_dist*data[0].charge_per_km);
                         data.push({hid:results[min_index].ID,x:results[min_index].x,y:results[min_index].y,cost:parseInt(cost), distance:min_dist});
-                        // console.log('data',data);
-                        // res.render('results',{data:data});
-                    //send optimised ambulance and hospital id
+                     
                         console.log('Ambulance number',amb_vehicle_no);
                         db.query(`select * from Ambulance_driver where vehicle_no='${amb_vehicle_no}'`,(err,results)=>{
                         if(err) console.log('this is the error', results);
@@ -326,6 +347,10 @@ app.post('/',urlencodedparser,(req,res)=>{
                                 contact_no:results[0].contact_no,
                                 driver_name:results[0].driver_name,
                                 statement:'Ambulance according to disease is not available. Sending you the nearest Ambulance'
+                            })
+                            data.push({
+                                patient_x:req.body.x,
+                                patient_y:req.body.y
                             })
                             console.log('@@@@@@data',data)
                             res.render('results',{data:data});

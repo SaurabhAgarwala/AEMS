@@ -3,3 +3,14 @@
             having count(Amb.vehicle_no)=(select count(Tools) from Diseases where Disease='${req.body.problem}')`
 
 `select x,y,vehicle_no from Ambulance_loc where vehicle_no = '${i.vehicle_no}' and status='available'`
+
+
+create table Equipments(equipment_name varchar(20),price int);
+insert into Equipments values('A1',500);
+insert into Equipments values('A2',600);
+insert into Equipments values('B1',400);
+insert into Equipments values('B2',200);
+insert into Equipments values('C1',100);
+insert into Equipments values('C2',1000);
+insert into Equipments values('D1',500);
+insert into Equipments values('D2',700);

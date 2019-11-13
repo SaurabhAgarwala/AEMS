@@ -116,23 +116,7 @@ router.post('/change_status_available/:vehicle_no',(req,res)=>{
     res.json(JSON.stringify({'status':'available'}));
 });
 
-/*router.post('/confirmation/:vehicle_no',(req,res)=>{
-    db.query(`update Ambulance_loc set status='Not Available' where vehicle_no='${req.params.vehicle_no}'`,(err,result)=>{
-        if(err) console.log('Error ocuured while updation');
-        else{
-            console.log('updated');
-            console.log('####################################################################################');
-            console.log(req.body.problem);
-            io.sockets.on('connection',(socket)=>{
-                console.log('inside amulance io');
-                io.sockets.emit('send detail to driver',{patient:'yes done'});
-            })
-            res.json(JSON.stringify({'status':'Booked'}));
-        }
-    })
-    //req.flash('success_msg','Your booked ambulance is on the way')
-    
-});*/
+
 
 var bodyparser=require('body-parser');
 urlencoded=bodyparser.urlencoded({extended:true})
@@ -143,16 +127,28 @@ router.post('/confirmation/:vehicle_no',urlencoded,(req,res)=>{
         else{
             console.log('updated');
             console.log('####################################################################################');
+            var data=[];
+            data.push({
+                vehicle_no:req.params.vehicle_no,
+                problem: req.body.problem,
+                patient_x: req.body.patient_x,
+                patient_y: req.body.patient_y,
+                hid: req.body.hid,
+                hidx: req.body.hidx,
+                hidy: req.body.hidy,
+                payment_info: req.body.payment_info
+            
+            })
             io.sockets.on('connection',(socket)=>{
                 console.log('inside amulance io');
-                io.sockets.emit('send detail to driver',{patient:'yes done',vehicle_no:req.params.vehicle_no});
+                io.sockets.emit('send detail to driver',data);
             })
             console.log('ends here  ');
-            console.log('problem',req.body.problem)
+            console.log('body',req.body)
             if(req.body.problem!='')
                 optimizeAmbulanceLocation(req.body.problem)
             console.log('starts here');
-            res.json(JSON.stringify({'status':'Booked'}))
+            res.json(JSON.stringify({data:req.body}))
         }
     })
     //req.flash('success_msg','Your booked ambulance is on the way')
