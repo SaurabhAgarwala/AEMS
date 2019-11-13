@@ -11,8 +11,8 @@ var router=express.Router()
 
 var db = mysql.createConnection({
     host     : 'localhost',
-    user     : '17shashank17',
-    password : 'lelopassword@',
+    user     : 'saurabh',
+    password : 'Saurabh@2021',
     database : 'aems'
 });
 
