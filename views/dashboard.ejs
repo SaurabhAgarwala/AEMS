@@ -57,19 +57,32 @@
                             </tr>
                         </table>
                         <% } %>
-                        <div id="new_booking">
-
+                        
+                        <div id="new_booking" style="visibility: hidden;">
+                            <h2 id="text_append"></h2>
+                                <table class="table table-bordered table-striped">
+                                        <tr>
+                                            <th>Patient Location</th>
+                                            <th>Hospital ID</th>
+                                            <th>Hospital Location</th>
+                                            <th>Bill</th>
+                                        </tr>
+                                        <tr>
+                                            <td><span id="patient_x"></span>-<span id="patient_y"></span></td>
+                                            <td id="hid"></td>
+                                            <td>
+                                                    <span id="hidx"></span>-<span id="hidy"></span>
+                                            </td>
+                                            <td id="bill"></td>
+                                        </tr>
+                                    </table>
                         </div>
                         <script>
                             document.getElementById('change-avl-status').addEventListener('click', (e) => {
                                 e.preventDefault();
                                 var status = document.getElementById('status');
-                                /*var formdata=new FormData();
-                                if(status.innerHTML=="Not Available")
-                                    formdata.append('status','Available');
-                                else
-                                    formdata.append('status','Not Available');
-                                console.log(formdata['status']);*/
+                                var new_booking=document.getElementById('new_booking')
+                                new_booking.style.visibility="hidden";
                                 var arr = [];
                                 if (status.innerHTML == "Not Available")
                                     arr.push({
@@ -80,17 +93,7 @@
                                         'status': 'Not Available'
                                     });
                                 console.log(arr);
-                                /*$.ajax({
-                                    data: formdata,
-                                    type: "POST",
-                                    url: '/ambulance/change_status',
-
-                                    success: function(data){
-                                        status.innerHTML=data;
-                                        console.log('Success');
-                                    }
-
-                                });*/
+                                
                                 fetch('/dashboard/change_status/', {
                                         method: 'post',
                                         body: arr,
@@ -119,13 +122,34 @@
 <script>
     $(function () {
         var socket = io.connect();
-        var $div = $('#new_booking');
+        var new_booking=document.getElementById('new_booking')
+        var $div = $('#new_booking')
         var vehicle_no = document.getElementById('vehicle_id')
+        var patient_x=document.getElementById('patient_x');
+        var patient_y=document.getElementById('patient_y');
+        var hid=document.getElementById('hid');
+        var hidx=document.getElementById('hidx')
+        var hidy=document.getElementById('hidy')
+        var bill=document.getElementById('bill')
+        var test_append=document.getElementById('text_append');
+
+
+
         console.log('waiting for event');
         socket.on('send detail to driver', function (data) {
             console.log('data', data);
-            if (vehicle_no = data.vehicle_no) {
-                $div.text('<h1>New Booking!</h1>');
+            console.log(data[0].vehicle_no);
+            if (vehicle_no = data[0].vehicle_no) {
+                test_append.innerHTML="New Booking";
+                console.log("in if",data[0].vehicle_no)
+                new_booking.style.visibility="visible";
+                patient_x.innerHTML=data[0].patient_x;
+                patient_y.innerHTML=data[0].patient_y;
+                hid.innerHTML=data[0].hid;
+                hidx.innerHTML=data[0].hidx;
+                hidy.innerHTML=data[0].hidy;
+                bill.innerHTML=data[0].payment_info;
+
             }
         })
     })

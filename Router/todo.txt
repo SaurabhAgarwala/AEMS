@@ -1,7 +1,10 @@
-1) frontend for login, register,register_ambulance
-2) sockets
-3) if ambulance is not avialable according to disease then send normal ambulance
-4) end points handle
-5) make equipment multivalued checkbox
-6) bill generation according to special ambulance
-7) 
+1) frontend for login, register,register_ambulance                                                  ----------- done
+2) sockets                                                                                          -------- not done
+3) if ambulance is not avialable according to disease then send normal ambulance                    ------------- done
+4) end points handle                                                                                ---------------- done
+5) make equipment multivalued checkbox                                                              ---------------- not done
+6) bill generation according to special ambulance                                                   ---------------- done
+7) send detail of patient to driver                                                                 -------------- done
+8) modify database                                                                                  -------------- not done
+9) display euipment used                                                                            ------------- done
+10) put user information in sql                                                                     ------------done
