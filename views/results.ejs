@@ -25,49 +25,49 @@
                 </nav>
             </div>
         </div>
-    </header>
-    <!-- Header part end-->
+</header>
+<!-- Header part end-->
 
-    <!-- banner part start-->
-    <% include ./partials/msg.ejs %>
+<!-- banner part start-->
+<% include ./partials/msg.ejs %>
 
-    <section class="banner_part">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6">
-                    <br><br>
-                        <h2>The location entered is <span id="patient_x"><%= data[3].patient_x %></span>-<span id="patient_y">
-                                <%= data[3].patient_y %></span></h2>
-                    <div class="banner_text">
-                        <div class="banner_text_iner">
-                            <h1>Emergency Ambulance Called</h1>
+<section class="banner_part">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <br><br>
+                <h2>The location entered is <span id="patient_x"><%= data[3].patient_x %></span>-<span id="patient_y">
+                        <%= data[3].patient_y %></span></h2>
+                <div class="banner_text">
+                    <div class="banner_text_iner">
+                        <h1>Emergency Ambulance Called</h1>
 
 
-                            <div>
-                                <% if(typeof(data[2].statement)=='string'){ %>
-                                    <h2><%= data[2].statement %></h2>
-                                <% } %>
-                                <h3>Ambulance data:</h3>
-                                <table class="table table-bordered table-striped">
-                                    <tr>
-                                        <th>Ambulance Vehicle No.</th>
-                                        <th>Location coordinate</th>
-                                        <% if(typeof(data[0].problem)== 'string') %>
-                                        <th>Problem</th>
-                                        <th>Driver Name</th>
-                                        <th>Driver Contact Number</th>
-                                    </tr>
-                                    <tr>
-                                        <td id="vehicle"><%= data[0].vehicle_no %></td>
-                                        <td><%= data[0].x %>-<%= data[0].y %></td>
-                                        <% if(typeof(data[0].problem)== 'string') %>
-                                        <td id="problem"><%= data[0].problem %></td>
-                                        <td><%= data[2].driver_name %></td>
-                                        <td><%= data[2].contact_no %></td>
-                                    </tr>
-                                </table>
-                            </div>
+                        <div>
+                            <% if(typeof(data[2].statement)=='string'){ %>
+                            <h2><%= data[2].statement %></h2>
+                            <% } %>
+                            <h3>Ambulance data:</h3>
+                            <table class="table table-bordered table-striped">
+                                <tr>
+                                    <th>Ambulance Vehicle No.</th>
+                                    <th>Location coordinate</th>
+                                    <% if(typeof(data[0].problem)== 'string') %>
+                                    <th>Problem</th>
+                                    <th>Driver Name</th>
+                                    <th>Driver Contact Number</th>
+                                </tr>
+                                <tr>
+                                    <td id="vehicle"><%= data[0].vehicle_no %></td>
+                                    <td><%= data[0].x %>-<%= data[0].y %></td>
+                                    <% if(typeof(data[0].problem)== 'string') %>
+                                    <td id="problem"><%= data[0].problem %></td>
+                                    <td><%= data[2].driver_name %></td>
+                                    <td><%= data[2].contact_no %></td>
+                                </tr>
+                            </table>
                         </div>
+                    </div>
                 </div>
             </div>
             <div class="col-lg-6">
@@ -86,7 +86,8 @@
                                 </tr>
                                 <tr>
                                     <td id="hid"><%= data[1].hid %></td>
-                                    <td><span id="hidx"><%= data[1].x %></span>-<span id="hidy"><%= data[0].y %></span></td>
+                                    <td><span id="hidx"><%= data[1].x %></span>-<span id="hidy"><%= data[0].y %></span>
+                                    </td>
                                 </tr>
                             </table>
                         </div>
@@ -109,8 +110,8 @@
                                     <td><%= parseInt(data[1].distance) %></td>
                                     <td id="payment_info"><%= data[1].cost %></td>
                                     <% if(data.length>4) {%>
-                                        <td><%= data[4].total_equipment_cost %></td>
-                                        <td><%= parseInt(data[4].total_cost) %></td>
+                                    <td><%= data[4].total_equipment_cost %></td>
+                                    <td><%= parseInt(data[4].total_cost) %></td>
                                     <% } %>
                                 </tr>
                             </table>
@@ -118,9 +119,11 @@
                     </div>
                 </div>
             </div>
-            <h2 id="after_post"></h2>
-            <button class="btn_2" href="" name="confirm_booking" id="confirm">Confirm Booking</button>
-            <button class="btn_2" id="go_back" href="main.ejs">Go Back</button>
+            <div class="col-lg-12">
+                <h2 id="after_post"></h2>
+                <button class="btn_2" href="" name="confirm_booking" id="confirm">Confirm Booking</button>
+                <button class="btn_2" id="go_back" href="main.ejs">Go Back</button>
+            </div>
         </div>
     </div>
 </section>
@@ -139,13 +142,13 @@
         var x = vehicle.innerHTML;
         var path = '/ambulance/change_status_available/5';
         var problem = document.getElementById('problem').innerHTML;
-        var hid=document.getElementById('hid').innerHTML;
-        var hidx=document.getElementById('hidx').innerHTML;
-        var hidy=document.getElementById('hidy').innerHTML;
-        var patient_x=document.getElementById('patient_x').innerHTML;
-        var patient_y=document.getElementById('patient_y').innerHTML;
-        var payment_info=document.getElementById('payment_info').innerHTML;
-        console.log(hid,hidx,hidy,patient_x,patient_y,payment_info)
+        var hid = document.getElementById('hid').innerHTML;
+        var hidx = document.getElementById('hidx').innerHTML;
+        var hidy = document.getElementById('hidy').innerHTML;
+        var patient_x = document.getElementById('patient_x').innerHTML;
+        var patient_y = document.getElementById('patient_y').innerHTML;
+        var payment_info = document.getElementById('payment_info').innerHTML;
+        console.log(hid, hidx, hidy, patient_x, patient_y, payment_info)
 
         fetch('/ambulance/confirmation/' + x, {
                 method: 'post',
