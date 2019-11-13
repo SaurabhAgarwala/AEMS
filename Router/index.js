@@ -37,16 +37,16 @@ function optimizeAmbulanceLocation(disease_name){
         console.log('train pts',train_points)
         console.log('name',disease_name);
         db.query(`select vehicle_no from Ambulance_loc where vehicle_no in (select Amb.vehicle_no from (select vehicle_no from Ambulance
-            where tools in (select Tools from Diseases where Disease='${disease_name}')) as Amb group by Amb.vehicle_no 
+            where tools in (select Tools from Diseases where Disease='${disease_name}')) as Amb group by Amb.vehicle_no
             having count(Amb.vehicle_no)=(select count(Tools) from Diseases where Disease='${disease_name}'))`,(err,ambulance_ids)=>{
                 train_pts = []
-                for (pt of train_points){ 
+                for (pt of train_points){
                     train_pts.push([pt.x,pt.y]);
                 }
                 console.log('train pts',train_pts)
                 var no_of_clusters = ambulance_ids.length;
                 km(train_pts,no_of_clusters,ambulance_ids);
-        })      
+        })
     })
 };
 
@@ -100,22 +100,26 @@ app.get('/dashboard/register',ensureAuthenticated,(req,res)=>{
             }
             else
                 res.render('ambulance_register');
-            // only unregistered people can visit 
+            // only unregistered people can visit
         }
     })
-    
+
 })
 
 app.post('/dashboard/register',ensureAuthenticated,(req,res)=>{
-    console.log(req.user.username)
-    db.query(`insert into Ambulance values('${req.body.ambulance_number}','${req.body.equipments}')`,(err,result)=>{
+    console.log(req.user.username);
+    console.log(req.body.equipments);
+    console.log(req.body.ambulance_number);
+    var i;
+    for (i = 0; i < req.body.equipments.length; i++) {
+    db.query(`insert into Ambulance values('${req.body.ambulance_number}','${req.body.equipments[i]}')`,(err,result)=>{
         if(err) console.log("Error 1")
         else console.log("insertion 1 complete");
-    })
+    });}
     db.query(`insert into Ambulance_loc values('${req.body.ambulance_number}','${50}','${50}',${500},${20},'Available')`,(err,result)=>{
         if(err) console.log("Error 2")
         else console.log("insertion 2 complete");
-    })
+    });
     db.query(`insert into Ambulance_driver values('${req.body.ambulance_number}','${req.user.username}','${req.body.contact_no}',${5})`,(err,result)=>{
         if(err) console.log("Error 3")
         else {
@@ -156,7 +160,7 @@ app.post('/',urlencodedparser,(req,res)=>{
             }
             // console.log(results[min_distance_index].vehicle_no);
             amb_vehicle_no = results[min_distance_index].vehicle_no
-            data.push({vehicle_no:results[min_distance_index].vehicle_no,x:results[min_distance_index].x,y:results[min_distance_index].y, 
+            data.push({vehicle_no:results[min_distance_index].vehicle_no,x:results[min_distance_index].x,y:results[min_distance_index].y,
                 base_fare:results[min_distance_index].base_fare, charge_per_km:results[min_distance_index].charge_per_km});
         });
         db.query(`Select * from Hospitals`,(err,results)=>{
@@ -197,7 +201,7 @@ app.post('/',urlencodedparser,(req,res)=>{
                 }
             });
             // console.log('inside if',data)
-            
+
         });
     }
     else{
@@ -229,7 +233,7 @@ app.post('/',urlencodedparser,(req,res)=>{
                     }
                     //Ambulance found
                     console.log(results[min_index]);
-                
+
                 amb_vehicle_no = results[min_index].vehicle_no
                 data.push({vehicle_no:results[min_index].vehicle_no,x:results[min_index].x,y:results[min_index].y,problem:req.body.problem,base_fare:results[min_index].base_fare,charge_per_km:results[min_index].charge_per_km});
                 db.query(`Select * from Hospitals`,(err,results)=>{
@@ -295,7 +299,7 @@ app.post('/',urlencodedparser,(req,res)=>{
                         console.log('query executed');
                         if(err) throw console.log("Error Occured");
                         else{
-                            
+
                         var points=[];
                         k=0;
                         min_distance=99999;
@@ -310,7 +314,7 @@ app.post('/',urlencodedparser,(req,res)=>{
                             k+=1;
                         }
                         amb_vehicle_no = results[min_distance_index].vehicle_no
-                        data.push({vehicle_no:results[min_distance_index].vehicle_no,x:results[min_distance_index].x,y:results[min_distance_index].y, 
+                        data.push({vehicle_no:results[min_distance_index].vehicle_no,x:results[min_distance_index].x,y:results[min_distance_index].y,
                             base_fare:results[min_distance_index].base_fare, charge_per_km:results[min_distance_index].charge_per_km});
                         }
                     });
@@ -340,7 +344,7 @@ app.post('/',urlencodedparser,(req,res)=>{
                         if(err) console.log('this is the error', results);
                         else{
                             data.push({
-                                contact_no:results[0].contact_no, 
+                                contact_no:results[0].contact_no,
                                 driver_name:results[0].driver_name,
                                 statement:'Ambulance according to disease is not available. Sending you the nearest Ambulance'
                             })
@@ -407,19 +411,19 @@ app.get('/dashboard',ensureAuthenticated,(req,res)=> {
                 res.render('dashboard',{username:req.user.username,status:result[0].status,vehicle_no:result[0].vehicle_no})
         }
     })
-    
+
 });
 
 app.post('/dashboard/change_status',(req,res)=>{
     console.log(req.user.username)
-    db.query(`update Ambulance_loc set status='Available' where Ambulance_loc.vehicle_no=(select 
+    db.query(`update Ambulance_loc set status='Available' where Ambulance_loc.vehicle_no=(select
         vehicle_no from Ambulance_driver where driver_name='${req.user.username}')`,(err,results)=>{
             if(err) console.log('err');
             else{
                 console.log('updation done');
                 res.json(JSON.stringify({'a':'done'}));
             }
-        })  
+        })
 })
 
 app.post('/dashboard',(req,res)=>{

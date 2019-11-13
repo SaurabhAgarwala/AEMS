@@ -2605,11 +2605,12 @@ ul {
 .banner_part {
   height: 935px;
   position: relative;
-  overflow: hidden;
+  /* overflow: hidden; */
   background-image: url(../img/banner_bg.png);
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-position: center;
+  margin-top: 100px;
 }
 
 @media (max-width: 991px) {
@@ -2618,7 +2619,7 @@ ul {
   .banner_part {
     background-image: none;
     background-color: #f7f7f7;
-    height: 650px;
+    /* height: 650px; */
   }
 }
 
@@ -2626,7 +2627,7 @@ ul {
 
   /* line 2, ../../01 cl html template/03_jun 2019/182_medico_html/sass/_banner.scss */
   .banner_part {
-    height: 650px;
+    /* height: 650px; */
   }
 }
 
@@ -2634,7 +2635,7 @@ ul {
 .banner_part .banner_text {
   display: table;
   width: 100%;
-  height: 935px;
+  /* height: 935px; */
 }
 
 /* line 26, ../../01 cl html template/03_jun 2019/182_medico_html/sass/_banner.scss */
@@ -2642,6 +2643,13 @@ ul {
   display: table-cell;
   vertical-align: middle;
   padding-top: 10px;
+  width: 100%;
+}
+
+.banner_part .banner_text .banner_text_iner table {
+  width: 100%;
+  table-layout: fixed;
+  word-wrap: break-word;
 }
 
 @media (max-width: 991px) {
@@ -2658,7 +2666,7 @@ ul {
   /* line 26, ../../01 cl html template/03_jun 2019/182_medico_html/sass/_banner.scss */
   .banner_part .banner_text .banner_text_iner {
     padding-top: 0;
-    padding-top: 100px;
+    padding-top: 20px;
   }
 }
 
@@ -2668,7 +2676,7 @@ ul {
   .banner_part .banner_text {
     text-align: center;
     padding-top: 0px;
-    height: 650px;
+    /* height: 650px; */
   }
 }
 
@@ -2678,7 +2686,7 @@ ul {
   .banner_part .banner_text {
     text-align: center;
     padding-top: 0px;
-    height: 650px;
+    /* height: 650px; */
   }
 }
 
@@ -2688,7 +2696,7 @@ ul {
   .banner_part .banner_text {
     text-align: center;
     padding-top: 0px;
-    height: 650px;
+    /* height: 650px; */
   }
 }
 
@@ -2696,7 +2704,7 @@ ul {
 
   /* line 21, ../../01 cl html template/03_jun 2019/182_medico_html/sass/_banner.scss */
   .banner_part .banner_text {
-    height: 650px;
+    /* height: 650px; */
   }
 }
 
