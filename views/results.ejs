@@ -52,16 +52,18 @@
                                 <tr>
                                     <th>Ambulance Vehicle No.</th>
                                     <th>Location coordinate</th>
-                                    <% if(typeof(data[0].problem)== 'string') %>
+                                    <% if(typeof(data[0].problem)== 'string') {%>
                                     <th>Problem</th>
+                                    <% } %>
                                     <th>Driver Name</th>
                                     <th>Driver Contact Number</th>
                                 </tr>
                                 <tr>
                                     <td id="vehicle"><%= data[0].vehicle_no %></td>
                                     <td><%= data[0].x %>-<%= data[0].y %></td>
-                                    <% if(typeof(data[0].problem)== 'string') %>
+                                    <% if(typeof(data[0].problem)== 'string') {%>
                                     <td id="problem"><%= data[0].problem %></td>
+                                    <% } %>
                                     <td><%= data[2].driver_name %></td>
                                     <td><%= data[2].contact_no %></td>
                                 </tr>
@@ -86,7 +88,7 @@
                                 </tr>
                                 <tr>
                                     <td id="hid"><%= data[1].hid %></td>
-                                    <td><span id="hidx"><%= data[1].x %></span>-<span id="hidy"><%= data[0].y %></span>
+                                    <td><span id="hidx"><%= data[1].x %></span>-<span id="hidy"><%= data[1].y %></span>
                                     </td>
                                 </tr>
                             </table>
