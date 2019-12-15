@@ -139,7 +139,7 @@
         socket.on('send detail to driver', function (data) {
             console.log('data', data);
             console.log(data[0].vehicle_no);
-            if (vehicle_no = data[0].vehicle_no) {
+            if (vehicle_no == data[0].vehicle_no) {
                 test_append.innerHTML="New Booking";
                 console.log("in if",data[0].vehicle_no)
                 new_booking.style.visibility="visible";

@@ -91,7 +91,7 @@ router.post('/register',function(req,res){
                         })
                         .catch(err => console.log(err));
                     })
-                })
+                });
             }
         });
     }
@@ -122,6 +122,7 @@ var bodyparser=require('body-parser');
 urlencoded=bodyparser.urlencoded({extended:true})
 
 router.post('/confirmation/:vehicle_no',urlencoded,(req,res)=>{
+    console.log('vehicle_no',req.params.vehicle_no)
     db.query(`update Ambulance_loc set status='Not Available' where vehicle_no='${req.params.vehicle_no}'`,(err,result)=>{
         if(err) console.log('Error ocuured while updation');
         else{
@@ -143,9 +144,8 @@ router.post('/confirmation/:vehicle_no',urlencoded,(req,res)=>{
                 console.log('inside amulance io');
                 io.sockets.emit('send detail to driver',data);
             })
-            console.log('ends here  ');
-            console.log('body',req.body)
-            if(req.body.problem!='')
+            console.log(req.body.problem)
+            if(req.body.problem!='General')
                 optimizeAmbulanceLocation(req.body.problem)
             console.log('starts here');
             res.json(JSON.stringify({data:req.body}))
